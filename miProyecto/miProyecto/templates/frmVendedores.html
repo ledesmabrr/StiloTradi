@@ -1,0 +1,14 @@
+{% extends 'navbar.html' %} 
+{% load static %}
+{% block content %} 
+
+<div class="row">
+       <h3 class="display-4 my-3">Vendedores</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-outlined" type="submit">Guardar</button>
+            <a class="btn btn-outlined" href="{% url 'detalleVendedores' %}">Cancelar</a>
+        </form>
+</div>
+{% endblock %}

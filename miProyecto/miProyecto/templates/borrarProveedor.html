@@ -1,0 +1,14 @@
+{% include 'navbar.html' %} 
+{% load static %} 
+{% block content %} 
+
+<div class="detalle">
+    <h1>Borrar proveedor</h1>
+
+    <p>¿Esta seguro de borrar el proveedor <b>{{proveedor.Nombre}}</b>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Aceptar</button>
+        <a type="submit" class="btn" href="/proveedor/">Cancelar</a>
+</div>
+{% endblock %}

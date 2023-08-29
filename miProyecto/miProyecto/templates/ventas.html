@@ -1,0 +1,26 @@
+{% include 'navbar.html' %} 
+{% block content %}
+
+<h2>Ventas</h2>
+
+<table id="tabla_ventas" class='table table-striped'>
+    <thead>
+        <tr>
+            <th>TipoVenta</th>
+            <th>Total</th>
+            <th>Fecha</th>
+        </tr>  
+    </thead>
+    <tbody>
+        {% for ventas in ventas %}
+        <tr>
+            
+            <td><a href="ventas/detalleVentas/{{ ventas.id }}">{{ ventas.TipoVenta}}</a></td>
+            <td>{{ ventas.Total}}</td>
+            <td>{{ ventas.Fecha}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

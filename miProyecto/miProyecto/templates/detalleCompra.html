@@ -1,0 +1,21 @@
+{% include 'navbar.html' %} 
+{% block content %} 
+<h2>Detalle de Compra</h2>
+
+<table id="tabla_compra" class='table table-striped'>
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Proveedor</th>
+            <th>Talle</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ compra.Producto}}</td>
+            <td>{{ compra.Proveedor}}</td>
+            <td>{{ compra.Talle}}</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% include 'navbar.html' %} 
+{% block content %} 
+<h2>Detalle de la Venta</h2>
+
+<table id="tabla_ventas" class='table table-striped'>
+    <thead>
+        <tr>
+            <th>Vendedor</th>
+            <th>Cliente</th>
+            <th>TipoVenta</th>
+            <th>TipoPago</th>
+            <th>Total</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ ventas.Vendedor}}</td>
+            <td>{{ ventas.Cliente}}</td>
+            <td>{{ ventas.TipoVenta}}</td>
+            <td>{{ ventas.TipoPago}}</td>
+            <td>{{ ventas.Total}}</td>
+            <td>{{ ventas.Fecha}}</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

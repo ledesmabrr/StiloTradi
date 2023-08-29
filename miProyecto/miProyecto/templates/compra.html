@@ -1,0 +1,25 @@
+{% include 'navbar.html' %}  
+{% block content %} 
+
+<h2>Compra</h2>
+
+<table id="tabla_compra" class="table table-striped ">
+
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Proveedor</th>
+            <th>Talle</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for compra in compra %}
+        <tr>
+            <td><a href="compra/detalleCompra/{{ compra.id }}">{{ compra.Producto}}</a></td>
+            <td>{{ compra.Proveedor}}</td>
+            <td>{{ compra.Talle}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

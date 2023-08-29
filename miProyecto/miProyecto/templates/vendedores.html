@@ -1,0 +1,23 @@
+{% include 'navbar.html' %}  
+{% block content %}
+
+<h2>Vendedores</h2>
+
+<table id="tabla_vendedores" class='table table-striped'>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Direccion</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vendedores in vendedores %}
+        <tr>
+            <td><a href="vendedores/detalleVendedores/{{ vendedores.id }}">{{ vendedores.Nombre}}</a></td>
+            <td>{{ vendedores.Direccion}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

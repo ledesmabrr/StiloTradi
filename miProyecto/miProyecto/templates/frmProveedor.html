@@ -1,0 +1,26 @@
+{% extends 'navbar.html' %} 
+{% load static %}
+{% block content %} 
+
+<form class="formulario" method="POST">
+    <h1 >Proveedor</h1>
+    {% csrf_token %}
+
+    <div class="campos">
+        <label for="form-label"></label>Nombre</label>
+        <input type="text" class="form-control" id="Nombre" name="Nombre" value="{{proveedor.Nombre}}" required>
+
+        <label for="form-label"></label>Telefono</label>
+        <input type="text" class="form-control" id="Telefono" name="Telefono" value="{{proveedor.Telefono}}" required>
+
+        <label for="form-label"></label>Localidad</label>
+        <input type="text" class="form-control" id="Localidad" name="Localidad" value="{{proveedor.Localidad}}" required>
+
+        <label for="form-label"></label>Email</label>
+        <input type="text" class="form-control" id="Email" name="Email" value="{{proveedor.Email}}" required>
+        
+
+    </div>
+    <button class="styled-button" type="submit">Guardar</button>
+</form>
+{% endblock %}

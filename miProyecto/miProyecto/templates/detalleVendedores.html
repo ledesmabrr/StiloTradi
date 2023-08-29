@@ -1,0 +1,21 @@
+{% include 'navbar.html' %} 
+{% block content %} 
+<h2>Detalle de Vendedores</h2>
+
+<table id="tabla_vendedores" class='table table-striped'>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Telefono</th>
+            <th>Direccion</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ vendedores.Nombre}}</td>
+            <td>{{ vendedores.Telefono}}</td>
+            <td>{{ vendedores.Direccion}}</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

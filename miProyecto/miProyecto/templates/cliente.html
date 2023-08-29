@@ -1,0 +1,23 @@
+{% include 'navbar.html' %} 
+{% block content %} 
+
+<h2>Clientes</h2>
+
+<table id="tabla_cliente" class="table table-striped ">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in cliente %}
+        <tr>
+            <td><a href="cliente/detalleCliente/{{ cliente.id }}">{{ cliente.Nombre}}</a></td>
+            <td>{{ cliente.Saldo}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

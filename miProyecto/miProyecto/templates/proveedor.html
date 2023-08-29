@@ -1,0 +1,27 @@
+{% include 'navbar.html' %} 
+{% block content %} 
+
+<h2>Proveedor</h2>
+<div class="d-flex justify-content-end  align-items-end"><a class="styled-button1" href="/proveedor/NuevoProveedor/">Nuevo</a></td>
+<table id="tabla_proveedor" class='table table-striped'>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Localidad</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        {% for proveedor in proveedor %}
+        <tr>
+            <td><a href="proveedor/detalleProveedor/{{ proveedor.id }}">{{ proveedor.Nombre}}</a></td>
+            
+            <td>{{ proveedor.Localidad}}</td>
+            <td class="d-flex justify-content-end  align-items-end"><a class="styled-button" href="/proveedor/ModificarProveedor/{{proveedor.id}}">Modificar</a></td>
+            <td><a class="styled-button2" href="/proveedor/EliminarProveedor/{{proveedor.id}}">Borrar</a></td> </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

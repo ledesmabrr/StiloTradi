@@ -1,0 +1,25 @@
+{% include 'navbar.html' %} 
+{% block content %} 
+
+
+<h2>Detalle del Proveedor</h2>
+
+<table id="tabla_proveedor" class='table table-striped'>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Telefono</th>
+            <th>Localidad</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ proveedor.Nombre}}</a></td>
+            <td>{{ proveedor.Telefono}}</a></td>
+            <td>{{ proveedor.Localidad}}</a></td>
+            <td>{{ proveedor.Email}}</a></td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}
