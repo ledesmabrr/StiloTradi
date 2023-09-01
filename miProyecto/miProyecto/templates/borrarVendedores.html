@@ -3,12 +3,12 @@
 {% block content %} 
 
 <div class="detalle">
-    <h1>Borrar proveedor</h1>
+    <h1>Borrar vendedores</h1>
 
-    <p>¿Esta seguro de borrar el proveedor <b>{{proveedor.Nombre}}</b>?</p>
+    <p>¿Esta seguro de borrar el Vendedor <b>{{vendedores.Nombre}}</b>?</p>
     <form method="post">
         {% csrf_token %}
         <button type="submit" class="styled-button-aceptar">Aceptar</button>
-        <a type="submit" class="styled-button-cancelar" href="/proveedor/">Cancelar</a>
+        <a type="submit" class="styled-button-cancelar" href="/vendedores/">Cancelar</a>
 </div>
 {% endblock %}

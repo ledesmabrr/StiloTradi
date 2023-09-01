@@ -1,11 +1,74 @@
-body{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+
+/* Estilos generales para el botón Guardar */
+.styled-button3 {
+    background-color: #4CAF50;
+    margin: 10px;
+}
+/* Estilo cuando el cursor está sobre el botón Guardar */
+.styled-button3:hover {
+    background-color:  #09b60f;
+    color:#ffffff;
+}
+/* Estilos generales para el botón Borrar */
+.btn.custom-btn2 {
+    background-color: rgb(216, 33, 33);
+    color:#ffffff;
+    
+}
+/* Estilo cuando el cursor está sobre el botón Borrar */
+.btn.custom-btn2:hover {
+    background-color:  #f80000;
+    color:#ffffff;
+}
+/* Estilos generales para el botón Nuevo */
+.btn.custom-btn {
+    background-color: rgb(241, 241, 241);
+    color:rgb(8, 106, 218);
+    margin-right: 180px;
+    margin-top: 10px;
+    text-align: center;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+/* Estilo cuando el cursor está sobre el botón Nuevo */
+.btn.custom-btn:hover {
+    background-color: rgb(8, 106, 218);
+    color:#ffffff;
+    
+}
+/* Estilos generales para el botón Modificar */
+.btn.custom-btn3 {
+    background-color:  #f37623;
+    color:#ffffff;
+}
+/* Estilo cuando el cursor está sobre el botón Modificar */
+
+.btn.custom-btn3:hover {
+    background-color: #ff6600;;
+    color:#ffffff;
 }
 
-.content{
-    flex: 1;
+.btn .custom-btn-aceptar{
+    background-color: #4CAF50;
+   
+}
+/* Estilo cuando el cursor está sobre el botón Aceptar */
+.btn .custom-btn-aceptar:hover {
+    background-color:  #09b60f;
+    color:#ffffff;
+}
+.styled-button-cancelar{
+    background-color: rgb(216, 33, 33);
+    margin: 10px;
+}
+/* Estilo cuando el cursor está sobre el botón Cancelar */
+.styled-button-cancelar:hover {
+    background-color:  #f80000;
+    color:#ffffff;
+}
+
+.detalle{
+    text-align: center;
 }
 
 nav{
@@ -56,11 +119,12 @@ footer{
 }
 
 /* Estilos para los encabezados de la tabla */
-.table th {
-    background-color: #f2f2f2;
+.table thead th {
     border: 1px solid #dddddd;
     padding: 8px;
-    text-align: left;
+    text-align: center;
+    background-color: #000000;
+    color: #ffffff;
 }
 
 /* Estilos para las celdas de datos */
@@ -69,96 +133,9 @@ footer{
     padding: 8px;
 }
 
-/* Alternancia de colores en filas */
-.table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+.content{
+    flex: 1;
 }
-
-/* Estilos generales para el botón Modificar */
-.styled-button3 {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-/* Estilos generales para el botón Borrar */
-.styled-button2 {
-    background-color: rgb(216, 33, 33);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-/* Estilos generales para el botón Nuevo */
-.styled-button1{
-    background-color: rgb(114, 180, 255);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    position: fixed;
-    top: 120px;
-    right: 250px;
-}
-/* Estilos generales para el botón Modificar */
-.styled-button {
-    background-color: #e47d29;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-/* Estilo cuando el cursor está sobre el botón Nuevo */
-.styled-button1:hover {
-    background-color: rgb(8, 106, 218);
-    color:#ffffff;
-}
-
-/* Estilo cuando el cursor está sobre el botón Modificar */
-.styled-button3:hover {
-    background-color:  #09b60f;
-    color:#ffffff;
-}
-
-/* Estilo cuando el cursor está sobre el botón Borrar */
-.styled-button2:hover {
-    background-color:  #f80000;
-    color:#ffffff;
-}
-
-/* Estilo cuando el cursor está sobre el botón Borrar */
-.styled-button:hover {
-    background-color:  #ff7402;
-    color:#ffffff;
-}
-
-
 
 
 

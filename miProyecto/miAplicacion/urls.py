@@ -19,6 +19,18 @@ urlpatterns = [
                path('proveedor/NuevoProveedor/', views.ProveedorNuevo, name='ProveedorNuevo'),
                path('proveedor/ModificarProveedor/<int:pk>/', views.ProveedorModif, name='ProveedorModif'),
                path('proveedor/EliminarProveedor/<int:pk>/', views.ProveedorEliminar, name='ProveedorEliminar'),
+
+               path('vendedores/NuevoVendedores/', views.VendedoresNuevo, name='VendedoresNuevo'),
+               path('vendedores/ModificarVendedor/<int:pk>/', views.VendedoresModif, name='VendedoresModif'),
+               path('vendedores/EliminarVendedor/<int:pk>/', views.VendedoresEliminar, name='VendedoresEliminar'),
+               
+               path('cliente/NuevoCliente/', views.ClientesNuevo, name='ClientesNuevo'),
+               path('cliente/ModificarCliente/<int:pk>/', views.ClientesModif, name='ClientesModif'),
+               path('cliente/EliminarCliente/<int:pk>/', views.ClientesEliminar, name='ClientesEliminar'),
+
+               path('producto/NuevoProducto/', views.ProductosNuevo, name='ProductosNuevo'),
+               path('producto/ModificarProducto/<int:pk>/', views.ProductosModif, name='ProductosModif'),
+               path('producto/EliminarProducto/<int:pk>/', views.ProductosEliminar, name='ProductosEliminar'),
                
                
                  

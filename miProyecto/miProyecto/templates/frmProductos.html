@@ -3,12 +3,12 @@
 {% block content %} 
 
 <div class="row">
-       <h3 class="display-4 my-3">Vendedores</h3>
+       <h3 class="display-4 my-3">Productos</h3>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
             <button class="styled-button-aceptar" type="submit">Guardar</button>
-            <a class="styled-button-cancelar" href="{% url 'vendedores' %}">Cancelar</a>
+            <a class="styled-button-cancelar" href="{% url 'producto' %}">Cancelar</a>
         </form>
 </div>
 {% endblock %}

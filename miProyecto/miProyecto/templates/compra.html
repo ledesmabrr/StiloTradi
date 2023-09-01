@@ -14,8 +14,8 @@
     </thead>
     <tbody>
         {% for compra in compra %}
-        <tr>
-            <td><a href="compra/detalleCompra/{{ compra.id }}">{{ compra.Producto}}</a></td>
+        <tr style ="cursor: pointer;" onclick="window.location.href='compra/detalleCompra/{{ compra.id }}'">
+            <td>{{ compra.Producto}}</td>
             <td>{{ compra.Proveedor}}</td>
             <td>{{ compra.Talle}}</td>
         </tr>

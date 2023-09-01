@@ -1,23 +1,46 @@
 {% include 'navbar.html' %} 
+{% include 'base.html' %} 
 {% block content %} 
-
-<h2>Clientes</h2>
-
-<table id="tabla_cliente" class="table table-striped ">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Saldo</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for cliente in cliente %}
-        <tr>
-            <td><a href="cliente/detalleCliente/{{ cliente.id }}">{{ cliente.Nombre}}</a></td>
-            <td>{{ cliente.Saldo}}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+{% load bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+    
+    <div class="d-flex justify-content-end  align-items-end">
+        <a class="btn btn-primary custom-btn" href="/cliente/NuevoCliente/">Nuevo</a></td>
+    </div>
+<head>
+   
+    <!-- Incluye los estilos de Bootstrap -->
+    {% bootstrap_css %}
+</head>
+<body>
+    <div class="container">
+        <h1>Clientes</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <tr>
+                        <th>Nombre</th> 
+                        <th>Saldo</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in cliente %}
+                <tr style ="cursor: pointer;" onclick="window.location.href='cliente/detalleCliente/{{ cliente.id }}'">
+                    <td>{{ cliente.Nombre}}</td>
+                    <td>{{ cliente.Saldo}}</td>
+                    <td class="d-flex justify-content-end  align-items-end"><a class="btn custom-btn3" href="/cliente/ModificarCliente/{{cliente.id}}">Modificar</a></td>
+                    <td><a class="btn custom-btn2" href="/cliente/EliminarCliente/{{cliente.id}}">Borrar</a></td> </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Incluye los scripts de Bootstrap al final del cuerpo -->
+    {% bootstrap_javascript %}
+</body>
+</html>
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas
-from .forms import VendedoresForm
+from .forms import VendedoresForm, ClientesForm, ProductosForm
 
 # Create your views here.
 def main(request):
@@ -137,24 +137,80 @@ def VendedoresModif(request, pk):
         form = VendedoresForm(request.POST, instance=vendedores)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('detalleVendedores'))
-        else:
-            form = VendedoresForm(instance=vendedores)
-        return render(request, 'frmVendedores.html', {'form': form, 'vendedores': vendedores})
+            return HttpResponseRedirect(reverse('vendedores'))
+    else:
+        form = VendedoresForm(instance=vendedores)
+    return render(request, 'frmVendedores.html', {'form': form, 'vendedores': vendedores})
     
 def VendedoresNuevo(request):
     if request.method == 'POST':
         form = VendedoresForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('detalleVendedores'))
-        else:
-            form = VendedoresForm()
-        return render(request, 'frmVendedores.html', {'form': form})
+            return HttpResponseRedirect(reverse('vendedores'))
+    else:
+        form = VendedoresForm()
+    return render(request, 'frmVendedores.html', {'form': form})
 
 def VendedoresEliminar(request, pk):
-    vendedores = Proveedor.objects.get(id=pk)
+    vendedores = Vendedores.objects.get(id=pk)
     if request.method == 'POST':
-        Vendedores.delete()
-        return HttpResponseRedirect(reverse('detalleVendedores'))
-    return render(request, 'frmVendedores.html', {'vendedores': vendedores})
+        vendedores.delete()
+        return HttpResponseRedirect(reverse('vendedores'))
+    return render(request, 'borrarVendedores.html', {'vendedores': vendedores})
+
+def ClientesModif(request, pk):
+    cliente = Cliente.objects.get(id=pk)
+    if request.method == 'POST':
+        form = ClientesForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('cliente'))
+    else:
+        form = ClientesForm(instance=cliente)
+    return render(request, 'frmClientes.html', {'form': form, 'cliente': cliente})
+    
+def ClientesNuevo(request):
+    if request.method == 'POST':
+        form = ClientesForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('cliente'))
+    else:
+        form = ClientesForm()
+    return render(request, 'frmClientes.html', {'form': form})
+
+def ClientesEliminar(request, pk):
+    clientes = Cliente.objects.get(id=pk)
+    if request.method == 'POST':
+        clientes.delete()
+        return HttpResponseRedirect(reverse('cliente'))
+    return render(request, 'borrarCliente.html', {'clientes': clientes})
+
+def ProductosModif(request, pk):
+    producto = Producto.objects.get(id=pk)
+    if request.method == 'POST':
+        form = ProductosForm(request.POST, instance=producto)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('producto'))
+    else:
+        form = ProductosForm(instance=producto)
+    return render(request, 'frmProductos.html', {'form': form, 'producto': producto})
+    
+def ProductosNuevo(request):
+    if request.method == 'POST':
+        form = ProductosForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('producto'))
+    else:
+        form = ProductosForm()
+    return render(request, 'frmProductos.html', {'form': form})
+
+def ProductosEliminar(request, pk):
+    producto = Producto.objects.get(id=pk)
+    if request.method == 'POST':
+        producto.delete()
+        return HttpResponseRedirect(reverse('producto'))
+    return render(request, 'borrarProducto.html', {'producto': producto})

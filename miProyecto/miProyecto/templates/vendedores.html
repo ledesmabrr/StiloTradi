@@ -2,7 +2,7 @@
 {% block content %}
 
 <h2>Vendedores</h2>
-
+<div class="d-flex justify-content-end  align-items-end"><a class="styled-button1" href="/vendedores/NuevoVendedores/">Nuevo</a></td>
 <table id="tabla_vendedores" class='table table-striped'>
     <thead>
         <tr>
@@ -12,9 +12,11 @@
     </thead>
     <tbody>
         {% for vendedores in vendedores %}
-        <tr>
-            <td><a href="vendedores/detalleVendedores/{{ vendedores.id }}">{{ vendedores.Nombre}}</a></td>
+        <tr style ="cursor: pointer;" onclick="window.location.href='vendedores/detalleVendedores/{{ vendedores.id }}'">
+            <td>{{ vendedores.Nombre}}</td>
             <td>{{ vendedores.Direccion}}</td>
+            <td class="d-flex justify-content-end  align-items-end"><a class="styled-button" href="/vendedores/ModificarVendedor/{{vendedores.id}}">Modificar</a></td>
+            <td><a class="styled-button2" href="/vendedores/EliminarVendedor/{{vendedores.id}}">Borrar</a></td> </td>
         </tr>
         {% endfor %}
     </tbody>

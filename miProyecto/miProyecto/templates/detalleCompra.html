@@ -1,21 +1,33 @@
 {% include 'navbar.html' %} 
+{% include 'base.html' %} 
 {% block content %} 
-<h2>Detalle de Compra</h2>
-
-<table id="tabla_compra" class='table table-striped'>
-    <thead>
-        <tr>
-            <th>Producto</th>
-            <th>Proveedor</th>
-            <th>Talle</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ compra.Producto}}</td>
-            <td>{{ compra.Proveedor}}</td>
-            <td>{{ compra.Talle}}</td>
-        </tr>
-    </tbody>
-</table>
+{% load bootstrap5 %}
+{% load static %}
+<head>
+    <!-- Incluye los estilos de Bootstrap -->
+    {% bootstrap_css %}
+</head>
+<body>
+    <div class="container">
+        <h1>Detalle de Compra</h1>
+        <table id="tabla_compra" class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Proveedor</th>
+                    <th>Talle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ compra.Producto}}</td>
+                    <td>{{ compra.Proveedor}}</td>
+                    <td>{{ compra.Talle}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% bootstrap_javascript %}
+</body>
+                
 {% endblock %}

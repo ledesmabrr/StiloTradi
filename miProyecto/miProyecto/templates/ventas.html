@@ -13,9 +13,9 @@
     </thead>
     <tbody>
         {% for ventas in ventas %}
-        <tr>
+        <tr style ="cursor: pointer;" onclick="window.location.href='ventas/detalleVentas/{{ ventas.id }}'">
             
-            <td><a href="ventas/detalleVentas/{{ ventas.id }}">{{ ventas.TipoVenta}}</a></td>
+            <td>{{ ventas.TipoVenta}}</td>
             <td>{{ ventas.Total}}</td>
             <td>{{ ventas.Fecha}}</td>
         </tr>
