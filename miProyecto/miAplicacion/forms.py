@@ -1,5 +1,20 @@
 from django import forms
-from .models import Vendedores, Cliente, Producto
+
+
+from .models import Vendedores, Cliente, Producto,Proveedor
+
+
+class ProveedorForm(forms.ModelForm):
+    class Meta:
+        model = Proveedor
+        fields = ('Nombre','Telefono','Localidad','Email')
+        widges = {
+            'Nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'Telefono': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Localidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'Email': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
 
 class VendedoresForm(forms.ModelForm):
     class Meta:

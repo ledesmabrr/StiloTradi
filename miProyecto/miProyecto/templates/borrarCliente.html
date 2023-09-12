@@ -8,7 +8,7 @@
     <p>¿Esta seguro de borrar el Cliente <b>{{cliente.Nombre}}</b>?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="styled-button-aceptar">Aceptar</button>
-        <a type="submit" class="styled-button-cancelar" href="/cliente/">Cancelar</a>
+        <button type="submit" class="btn custom-btn-aceptar">Aceptar</button>
+        <a type="submit" class="btn custom-btn-cancelar" href="/cliente/">Cancelar</a>
 </div>
 {% endblock %}

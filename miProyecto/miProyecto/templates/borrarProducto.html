@@ -1,14 +1,19 @@
-{% include 'navbar.html' %} 
-{% load static %} 
+{% include 'navbar.html' %}  
 {% block content %} 
+{% load static %} 
+<body>
+    <div class="detalle">
+        <h1>Borrar productos</h1>
 
-<div class="detalle">
-    <h1>Borrar productos</h1>
-
-    <p>¿Esta seguro de borrar el Producto <b>{{producto.Descripcion}}</b>?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn custom-btn-aceptar">Aceptar</button>
-        <a type="submit" class="btn custom-btn-cancelar" href="/producto/">Cancelar</a>
-</div>
-{% endblock %}
+        <p>¿Esta seguro de borrar el Producto <b>{{producto.Descripcion}}</b>?</p>
+        <form method="post">
+            {% csrf_token %}
+            
+            <a class="btn custom-btn-aceptar">Aceptar</a>                   
+            <a class="btn custom-btn-cancelar" href="/producto/">Cancelar</a>
+        </form>
+    </div>
+    
+</body>
+</html>
+{% endblock %} 

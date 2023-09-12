@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas
-from .forms import VendedoresForm, ClientesForm, ProductosForm
+from .forms import VendedoresForm, ClientesForm, ProductosForm, ProveedorForm 
 
 # Create your views here.
 def main(request):
@@ -93,7 +93,7 @@ def listaProducto(request, pk):
     context = {'Producto': Producto}
     return render(request, 'listaProducto.html', context)
 
-
+''' View  frmProveedor Tipo de Formulario 1
 def ProveedorModif(request,pk):
     proveedor=Proveedor.objects.get(id=pk)
 
@@ -111,8 +111,9 @@ def ProveedorModif(request,pk):
         proveedor.save()
         return HttpResponseRedirect(reverse('proveedor'))
     return render(request, "frmProveedor.html", {'proveedor': proveedor})
+'''
 
-
+'''
 def ProveedorNuevo(request):
     if request.method== 'POST':
         nombre = request.POST.get('Nombre')
@@ -122,7 +123,29 @@ def ProveedorNuevo(request):
         Proveedor.objects.create(Nombre = nombre, Telefono = telefono, Localidad = localidad, Email = email)
         return HttpResponseRedirect(reverse('proveedor'))
     return render(request, "frmProveedor.html")
+'''
+def ProveedorModif(request,pk):
+    proveedor=Proveedor.objects.get(id=pk)
+    if request.method == 'POST':
+        form = ProveedorForm(request.POST, instance=Proveedor)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('proveedor'))
+    else:
+        form = ProveedorForm(instance=proveedor)
+    return render(request, 'frmProveedor.html', {'form': form, 'proveedor': proveedor})
+   
 
+
+def ProveedorNuevo(request):
+    if request.method == 'POST':
+        form =ProveedorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('proveedor'))
+    else:
+        form = ProveedorForm()
+    return render(request, 'frmProveedor.html', {'form': form})
 
 def ProveedorEliminar(request, pk):
     proveedor = Proveedor.objects.get(id=pk)

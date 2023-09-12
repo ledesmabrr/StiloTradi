@@ -1,3 +1,6 @@
+.encabezado{
+    height: 100px;
+}
 
 /* Estilos generales para el botón Guardar */
 .styled-button3 {
@@ -48,21 +51,22 @@
     color:#ffffff;
 }
 
-.btn .custom-btn-aceptar{
-    background-color: #4CAF50;
-   
+
+.btn.custom-btn-aceptar{
+    background-color: #4CAF50; 
+    color:#ffffff; 
 }
 /* Estilo cuando el cursor está sobre el botón Aceptar */
-.btn .custom-btn-aceptar:hover {
+.btn.custom-btn-aceptar:hover {
     background-color:  #09b60f;
     color:#ffffff;
 }
-.styled-button-cancelar{
+.btn.custom-btn-cancelar{
     background-color: rgb(216, 33, 33);
-    margin: 10px;
+    color:#ffffff;
 }
 /* Estilo cuando el cursor está sobre el botón Cancelar */
-.styled-button-cancelar:hover {
+.btn.custom-btn-cancelar:hover {
     background-color:  #f80000;
     color:#ffffff;
 }
@@ -71,24 +75,20 @@
     text-align: center;
 }
 
-nav{
+.navbar .navbar-expand-lg{
     background-color: #000000;
     margin: 0rem;
     color: #ffffff;
+    margin-top: 50px;
 }
-.nav-item a {
-    color: #9e9797;
+.nav-item {
+    color: #000000;
 }
 
 header{
     background-color:#000000 ;
-    color: #ffffff;
-    margin: 0rem;
-    height: 3.125rem;
     text-align: center;
 }
-
-
 footer{
     background-color: #000000;
     color: #ffffff;

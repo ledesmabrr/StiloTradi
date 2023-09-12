@@ -1,27 +1,15 @@
+<!-- Tipo de Formulario 2-->
 {% extends 'navbar.html' %} 
 {% load static %}
-{% block content %} 
+{% block content %}
 
-<form class="formulario" method="POST">
-    <h1 >Proveedor</h1>
-    {% csrf_token %}
-
-    <div class="campos">
-        <label for="form-label"></label>Nombre</label>
-        <input type="text" class="form-control" id="Nombre" name="Nombre" value="{{proveedor.Nombre}}" required>
-
-        <label for="form-label"></label>Telefono</label>
-        <input type="text" class="form-control" id="Telefono" name="Telefono" value="{{proveedor.Telefono}}" required>
-
-        <label for="form-label"></label>Localidad</label>
-        <input type="text" class="form-control" id="Localidad" name="Localidad" value="{{proveedor.Localidad}}" required>
-
-        <label for="form-label"></label>Email</label>
-        <input type="text" class="form-control" id="Email" name="Email" value="{{proveedor.Email}}" required>
-        
-
-    </div>
-    <button class="styled-button3" type="submit">Guardar</button>
-    <a class="styled-button-cancelar" href="{% url 'proveedor' %}">Cancelar</a>
-</form>
+<div class="row">
+       <h3 class="display-4 my-3">Proveedor</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn custom-btn-aceptar" type="submit">Guardar</button>
+            <a class="btn custom-btn-cancelar" href="{% url 'proveedor' %}">Cancelar</a>
+        </form>
+</div>
 {% endblock %}

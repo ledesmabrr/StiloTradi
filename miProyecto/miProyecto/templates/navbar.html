@@ -1,12 +1,13 @@
 {% extends 'base.html' %} 
 {% load static %} 
 {% block content %} 
-<!--<img src="static\logo.jpeg" alt="logo">-->
-<header>
-    <h1>StiloTradi</h1>
+
+<header class="encabezado">
+    <h1><img src="{% static 'imagenes/logo.jpg' %}" alt="Mi Imagen" class="img-fluid" width="200" height="100"></h1>
+    <!-- Utiliza la clase de Bootstrap "img-fluid" para hacer que la imagen sea responsive -->
 </header>
     
-<nav class="navbar navbar-expand-lg " >
+<nav class="navbar navbar-expand-lg" >
     
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +48,6 @@
     
       </div>
     </div>
-  </nav>
+</nav>
 
 {% endblock %} 
