@@ -1,4 +1,4 @@
-{% include 'navbar.html' %} 
+
 {% include 'base.html' %} 
 {% block content %} 
 {% load bootstrap5 %}
@@ -15,24 +15,25 @@
 </head>
 <body>
     <div class="container">
-        <h1>Vendedores</h1>
+        <h1>Vendedores</h1> 
         <table class="table">
             <thead>
                 <tr>
                     <tr>
                         <th>Nombre</th>
+                        <th>Telefono</th>
                         <th>Direccion</th>
-                        <th></th>
                         <th></th>
                     </tr>
                 </tr>
             </thead>
             <tbody>
                 {% for vendedores in vendedores %}
-                <tr style ="cursor: pointer;" onclick="window.location.href='vendedores/detalleVendedores/{{ vendedores.id }}'">
+                <tr style ="cursor: pointer;" onclick="window.location.href='/vendedores/ModificarVendedor/{{vendedores.id}}'">
                     <td>{{ vendedores.Nombre}}</td>
+                    <td>{{ vendedores.Telefono}}</td>
                     <td>{{ vendedores.Direccion}}</td>
-                    <td class="d-flex justify-content-end  align-items-end"><a class="btn custom-btn3" href="/vendedores/ModificarVendedor/{{vendedores.id}}">Modificar</a></td>
+                   
                     <td><a class="btn custom-btn2" href="/vendedores/EliminarVendedor/{{vendedores.id}}">Borrar</a></td> </td>
                 </tr>
                 {% endfor %}

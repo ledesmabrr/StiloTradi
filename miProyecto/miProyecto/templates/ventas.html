@@ -1,12 +1,13 @@
-{% include 'navbar.html' %} 
+
 {% include 'base.html' %} 
 {% block content %} 
 {% load bootstrap5 %}
-{% load static %}
+{% load static %} 
 <!DOCTYPE html>
-
+<div class="d-flex justify-content-end  align-items-end">
+    <a class="btn btn-primary custom-btn" href="/ventas/VentasNuevo/">Nuevo</a></td>
+</div>
 <head>
-   
     <!-- Incluye los estilos de Bootstrap -->
     {% bootstrap_css %}
 </head>
@@ -20,10 +21,10 @@
                     <th>Total</th>
                     <th>Fecha</th>
                 </tr>
-            </thead>
+            </thead> 
             <tbody>
                  {% for ventas in ventas %}
-        <tr style ="cursor: pointer;" onclick="window.location.href='ventas/detalleVentas/{{ ventas.id }}'">
+        <tr style ="cursor: pointer;" onclick="window.location.href='/ventas/VentasModif/{{ ventas.id }}'">
             
             <td>{{ ventas.TipoVenta}}</td>
             <td>{{ ventas.Total}}</td>

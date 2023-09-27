@@ -2,52 +2,5 @@
 {% load static %} 
 {% block content %} 
 
-<header class="encabezado">
-    <h1><img src="{% static 'imagenes/logo.jpg' %}" alt="Mi Imagen" class="img-fluid" width="200" height="100"></h1>
-    <!-- Utiliza la clase de Bootstrap "img-fluid" para hacer que la imagen sea responsive -->
-</header>
-    
-<nav class="navbar navbar-expand-lg" >
-    
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-            <li class="nav-item ">
-                <a class="btn" id="productobtn" href="/producto">Productos</a>
-            </li>
-            <li class="nav-item ">
-                <a class="btn" id="proveedorbtn" href="/proveedor">Proveedor</a>
-            </li> 
-           
-            <li class="nav-item ">
-                <a class="btn" id="vendedoresbtn" href="/vendedores">Vendedores</a>
-            </li>
-            <li class="nav-item ">
-                <a class="btn" id="clientebtn" href="/cliente">Cliente</a>
-            </li>
-            
-            <li class="nav-item ">
-                <a class="btn" id="comprabtn" href="/compra">Compra</a>
-            </li>
-            <li class="nav-item ">
-                <a class="btn" id="ventasbtn" href="/ventas">Ventas</a>
-            </li>
-    </ul>
-
-    
-    <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button  class="btn btn-primary" id="search" type="submit">Buscar</button>
-        
-    </form>
-    
-      </div>
-    </div>
-</nav>
 
 {% endblock %} 

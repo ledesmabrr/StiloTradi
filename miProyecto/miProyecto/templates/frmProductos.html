@@ -1,4 +1,4 @@
-{% extends 'navbar.html' %} 
+{% extends 'base.html' %} 
 {% load static %}
 {% block content %} 
 
@@ -8,7 +8,7 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button class="btn custom-btn-aceptar" type="submit">Guardar</button>
-            <a class="btn custom-btn-cancelar" href="{% url 'producto' %}">Cancelar</a>
+            <a class="btn custom-btn-cancelar" href="/producto/">Cancelar</a>
         </form>
 </div>
 {% endblock %}

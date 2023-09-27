@@ -1,4 +1,4 @@
-{% include 'navbar.html' %} 
+
 {% include 'base.html' %} 
 {% block content %} 
 {% load bootstrap5 %}
@@ -6,7 +6,7 @@
 <!DOCTYPE html>
     
     <div class="d-flex justify-content-end  align-items-end">
-        <a class="btn btn-primary custom-btn" href="/cliente/NuevoCliente/">Nuevo</a></td>
+        <a class="btn btn-primary custom-btn" href="{% url 'ClienteNuevo' %}">Nuevo</a></td>
     </div>
 <head>
    
@@ -23,17 +23,15 @@
                         <th>Nombre</th> 
                         <th>Saldo</th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </tr>
             </thead>
             <tbody>
                 {% for cliente in cliente %}
-                <tr style ="cursor: pointer;" onclick="window.location.href='cliente/detalleCliente/{{ cliente.id }}'">
+                <tr style ="cursor: pointer;" onclick="window.location.href='/cliente/ClienteModif/{{cliente.id}}'">
                     <td>{{ cliente.Nombre}}</td>
                     <td>{{ cliente.Saldo}}</td>
-                    <td class="d-flex justify-content-end  align-items-end"><a class="btn custom-btn3" href="/cliente/ModificarCliente/{{cliente.id}}">Modificar</a></td>
-                    <td><a class="btn custom-btn2" href="/cliente/EliminarCliente/{{cliente.id}}">Borrar</a></td> </td>
+                    <td><a class="btn custom-btn2" href="/cliente/ClienteBorrar/{{cliente.id}}">Borrar</a>
                 </tr>
                 {% endfor %}
             </tbody> 

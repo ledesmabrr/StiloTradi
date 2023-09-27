@@ -1,14 +1,12 @@
 
-
-
-
-{% include 'navbar.html' %} 
 {% include 'base.html' %} 
 {% block content %} 
 {% load bootstrap5 %}
 {% load static %}
 <!DOCTYPE html>
-
+<div class="d-flex justify-content-end  align-items-end">
+    <a class="btn btn-primary custom-btn" href="/compra/CompraNuevo/">Nuevo</a></td>
+</div>
 <head>
    
     <!-- Incluye los estilos de Bootstrap -->
@@ -21,7 +19,6 @@
             <thead>
                 <tr>
                     <tr>
-                        <th>Producto</th>
                         <th>Proveedor</th>
                         <th>Talle</th>
                         
@@ -29,13 +26,12 @@
                 </tr>
             </thead>
             <tbody>
-                {% for compra in compra %}
-                <tr style ="cursor: pointer;" onclick="window.location.href='compra/detalleCompra/{{ compra.id }}'">
-                    <td>{{ compra.Producto}}</td>
-                    <td>{{ compra.Proveedor}}</td>
-                    <td>{{ compra.Talle}}</td>
-                </tr>
-                {% endfor %}
+                 {% for compra in compra %}
+        <tr style ="cursor: pointer;" onclick="window.location.href='/compra/CompraModif/{{ compra.id }}'">
+            <td>{{ compra.Proveedor}}</td>
+            <td>{{ compra.Talle}}</td>
+        </tr>
+                 {% endfor %}
             </tbody> 
         </table>
     </div>

@@ -1,7 +1,11 @@
 from django.shortcuts import render, reverse
+from django.urls import reverse_lazy
+from django.forms import formset_factory
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.http import HttpResponse,HttpResponseRedirect
-from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas
-from .forms import VendedoresForm, ClientesForm, ProductosForm, ProveedorForm 
+from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas,VentaProd
+from .forms import VendedoresForm, ClientesForm, ProductosForm, ProveedorForm,VentaProdForm,VentasForm,CompraForm   
+
 
 # Create your views here.
 def main(request):
@@ -88,71 +92,6 @@ def index(request):
     f"<p>Este es un sistema de venta de ropa</p>"
     return HttpResponse(mensaje)
 
-def listaProducto(request, pk):
-    producto = producto.object.get(id=pk)
-    context = {'Producto': Producto}
-    return render(request, 'listaProducto.html', context)
-
-''' View  frmProveedor Tipo de Formulario 1
-def ProveedorModif(request,pk):
-    proveedor=Proveedor.objects.get(id=pk)
-
-    if request.method == 'POST':
-        id = request.POST.get('id')
-        nombre = request.POST.get('Nombre')
-        telefono = request.POST.get('Telefono')
-        localidad = request.POST.get('Localidad')
-        email = request.POST.get('Email')
-
-        proveedor.Nombre = nombre
-        proveedor.Telefono = telefono
-        proveedor.Localidad = localidad
-        proveedor.Email = email
-        proveedor.save()
-        return HttpResponseRedirect(reverse('proveedor'))
-    return render(request, "frmProveedor.html", {'proveedor': proveedor})
-'''
-
-'''
-def ProveedorNuevo(request):
-    if request.method== 'POST':
-        nombre = request.POST.get('Nombre')
-        telefono = request.POST.get('Telefono')
-        localidad = request.POST.get('Localidad')
-        email = request.POST.get('Email')
-        Proveedor.objects.create(Nombre = nombre, Telefono = telefono, Localidad = localidad, Email = email)
-        return HttpResponseRedirect(reverse('proveedor'))
-    return render(request, "frmProveedor.html")
-'''
-def ProveedorModif(request,pk):
-    proveedor=Proveedor.objects.get(id=pk)
-    if request.method == 'POST':
-        form = ProveedorForm(request.POST, instance=Proveedor)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('proveedor'))
-    else:
-        form = ProveedorForm(instance=proveedor)
-    return render(request, 'frmProveedor.html', {'form': form, 'proveedor': proveedor})
-   
-
-
-def ProveedorNuevo(request):
-    if request.method == 'POST':
-        form =ProveedorForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('proveedor'))
-    else:
-        form = ProveedorForm()
-    return render(request, 'frmProveedor.html', {'form': form})
-
-def ProveedorEliminar(request, pk):
-    proveedor = Proveedor.objects.get(id=pk)
-    if request.method == 'POST':
-        proveedor.delete()
-        return HttpResponseRedirect(reverse('proveedor'))
-    return render(request, 'borrarProveedor.html', {'Proveedor': proveedor})
 
 def VendedoresModif(request, pk):
     vendedores = Vendedores.objects.get(id=pk)
@@ -182,58 +121,182 @@ def VendedoresEliminar(request, pk):
         return HttpResponseRedirect(reverse('vendedores'))
     return render(request, 'borrarVendedores.html', {'vendedores': vendedores})
 
-def ClientesModif(request, pk):
-    cliente = Cliente.objects.get(id=pk)
-    if request.method == 'POST':
-        form = ClientesForm(request.POST, instance=cliente)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('cliente'))
-    else:
-        form = ClientesForm(instance=cliente)
-    return render(request, 'frmClientes.html', {'form': form, 'cliente': cliente})
-    
-def ClientesNuevo(request):
-    if request.method == 'POST':
-        form = ClientesForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('cliente'))
-    else:
-        form = ClientesForm()
-    return render(request, 'frmClientes.html', {'form': form})
 
-def ClientesEliminar(request, pk):
-    clientes = Cliente.objects.get(id=pk)
-    if request.method == 'POST':
-        clientes.delete()
-        return HttpResponseRedirect(reverse('cliente'))
-    return render(request, 'borrarCliente.html', {'clientes': clientes})
+class ProveedorLista(ListView):
+    model = Proveedor
+    template_name = 'Proveedor.html'
+    context_object_name = 'proveedor'
 
-def ProductosModif(request, pk):
-    producto = Producto.objects.get(id=pk)
-    if request.method == 'POST':
-        form = ProductosForm(request.POST, instance=producto)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('producto'))
-    else:
-        form = ProductosForm(instance=producto)
-    return render(request, 'frmProductos.html', {'form': form, 'producto': producto})
-    
-def ProductosNuevo(request):
-    if request.method == 'POST':
-        form = ProductosForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('producto'))
-    else:
-        form = ProductosForm()
-    return render(request, 'frmProductos.html', {'form': form})
+class ProveedorNuevo(CreateView):
+    model = Proveedor
+    form_class = ProveedorForm
+    template_name = 'frmProveedor.html'
+    success_url = reverse_lazy('proveedor')
 
-def ProductosEliminar(request, pk):
-    producto = Producto.objects.get(id=pk)
-    if request.method == 'POST':
-        producto.delete()
-        return HttpResponseRedirect(reverse('producto'))
-    return render(request, 'borrarProducto.html', {'producto': producto})
+class ProveedorModif(UpdateView):
+    model = Proveedor 
+    form_class = ProveedorForm
+    template_name = 'frmProveedor.html'
+    success_url = reverse_lazy('proveedor')
+
+class ProveedorBorrar(DeleteView):
+    model = Proveedor
+    template_name = 'borrarProveedor.html'
+    success_url = reverse_lazy('proveedor')
+
+
+class ClienteLista(ListView):
+    model = Cliente
+    template_name = 'Cliente.html'
+    context_object_name = 'cliente'
+
+class ClienteNuevo(CreateView):
+    model = Cliente
+    form_class = ClientesForm
+    template_name = 'frmClientes.html'
+    success_url = reverse_lazy('cliente')
+
+class ClienteModif(UpdateView):
+    model = Cliente 
+    form_class = ClientesForm
+    template_name = 'frmClientes.html'
+    success_url = reverse_lazy('cliente')
+
+class ClienteBorrar(DeleteView):
+    model = Cliente
+    template_name = 'borrarCliente.html'
+    success_url = reverse_lazy('cliente')
+
+
+class ProductoLista(ListView):
+    model = Producto
+    template_name = 'Producto.html'
+    context_object_name = 'productos'
+
+class ProductoNuevo(CreateView):
+    model = Producto
+    form_class = ProductosForm
+    template_name = 'frmProductos.html'
+    success_url = reverse_lazy('producto')
+
+class ProductoModif(UpdateView):
+    model = Producto 
+    form_class = ProductosForm
+    template_name = 'frmProductos.html'
+    success_url = reverse_lazy('producto')
+
+class ProductoBorrar(DeleteView):
+    model = Producto
+    template_name = 'borrarProducto.html'
+    success_url = reverse_lazy('producto')
+
+
+class VentasNuevo(CreateView):
+    model = Ventas
+    form_class = VentasForm   
+    template_name = 'VentaProd.html'
+    success_url = reverse_lazy('ventas')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = VentasForm.VentaProdFormset(self.request.POST)
+        else:
+            context['formset'] = VentasForm.VentaProdFormset()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid() and form.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+
+class VentasModif(UpdateView):
+    model = Ventas
+    form_class = VentasForm
+    template_name = 'VentaProd.html'
+    success_url = reverse_lazy('ventas')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = VentasForm.VentaProdFormset(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = VentasForm.VentaProdFormset(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid() and form.is_valid():
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+
+
+
+
+
+
+
+
+
+
+
+
+class CompraNuevo(CreateView):
+    model = Compra
+    form_class = CompraForm   
+    template_name = 'CompraProd.html'
+    success_url = reverse_lazy('compra')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = CompraForm.CompraProdFormset(self.request.POST)
+        else:
+            context['formset'] = CompraForm.CompraProdFormset()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid() and form.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+
+class CompraModif(UpdateView):
+    model = Compra
+    form_class = CompraForm
+    template_name = 'CompraProd.html'
+    success_url = reverse_lazy('compra')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = CompraForm.CompraProdFormset(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = CompraForm.CompraProdFormset(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid() and form.is_valid():
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))

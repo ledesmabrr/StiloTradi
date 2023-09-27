@@ -1,8 +1,5 @@
 from django import forms
-
-
-from .models import Vendedores, Cliente, Producto,Proveedor
-
+from .models import Vendedores, Cliente, Producto,Proveedor,Ventas,VentaProd,Compra,CompraProd 
 
 class ProveedorForm(forms.ModelForm):
     class Meta:
@@ -11,7 +8,7 @@ class ProveedorForm(forms.ModelForm):
         widges = {
             'Nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'Telefono': forms.NumberInput(attrs={'class': 'form-control'}),
-            'Localidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'Localidad': forms.TextInput(attrs={'class': 'form-control'}), 
             'Email': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
@@ -41,7 +38,7 @@ class ClientesForm(forms.ModelForm):
 class ProductosForm(forms.ModelForm):
     class Meta:
         model = Producto
-        fields = ('TipoProducto','Descripcion','Talle','Color','Marca','PrecioCompra','PrecioVenta','Stock')
+        fields = '__all__'
         widges = {
             'TipoProducto': forms.TextInput(attrs={'class': 'form-control'}),
             'Descripcion': forms.TextInput(attrs={'class': 'form-control'}),
@@ -52,3 +49,54 @@ class ProductosForm(forms.ModelForm):
             'PrecioVenta': forms.NumberInput(attrs={'class': 'form-control'}),
             'Stock': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+
+class VentaProdForm(forms.ModelForm):
+    class Meta:
+        model = VentaProd
+        fields = '__all__'
+        widgets = {
+            'Producto': forms.Select(attrs={'class': 'form-select'}),
+            'Ventas': forms.Select(attrs={'class': 'form-select'}), 
+        }
+
+
+class VentasForm(forms.ModelForm):
+    class Meta:
+        model = Ventas
+        fields = '__all__'
+        widgets = {
+            'Vendedor':forms.Select(attrs={'class': 'form-select'}),
+            'Cliente': forms.Select(attrs={'class': 'form-select'}),
+            'TipoVenta': forms.TextInput(attrs={'class': 'form-control'}),
+            'TipoPago': forms.TextInput(attrs={'class': 'form-control'}),
+            'Total': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Fecha': forms.DateInput(attrs={'class': 'form-control'}),
+        }
+
+    VentaProdFormset = forms.inlineformset_factory(Ventas,VentaProd, form=VentaProdForm, extra=1)
+
+
+
+class CompraProdForm(forms.ModelForm):
+    class Meta:
+        model = CompraProd
+        fields = '__all__'
+        widgets = {
+            'Compra': forms.Select(attrs={'class': 'form-select'}),
+            'Producto': forms.Select(attrs={'class': 'form-select'}), 
+        }
+    
+
+class CompraForm(forms.ModelForm):
+    class Meta:
+        model = Compra
+        fields = '__all__'
+        widgets = {
+            'Proveedor': forms.Select(attrs={'class': 'form-select'}),
+            'Cantidad': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Fecha': forms.DateInput(attrs={'class': 'form-control'}),
+            
+        }
+
+    CompraProdFormset = forms.inlineformset_factory(Compra,CompraProd, form= CompraProdForm, extra=1)

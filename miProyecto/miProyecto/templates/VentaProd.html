@@ -1,0 +1,38 @@
+
+{% include 'base.html' %} 
+{% block content %} 
+{% load bootstrap5 %}
+{% load static %} 
+<div class="row">
+    <h3 class="display-4 my-3">Ventas #{{ ventas.id }}</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ formset.management_form }}
+        <h6 class="display-6 my-3">Producto</h6>
+
+        <table class="table table-striped table-hover"> 
+            <thead class="bg-dark text-light">
+                <th>Id</th>
+                <th>TipoProducto</th>
+                <th></th><th>
+                <th>¿Borrar?</th>
+            </thead>
+            <tbody>
+            {% for form in formset %}
+            <tr>
+                <td>{{ form.id.value }}</td>
+                {% for field in form %}
+                    <td>{{ field }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <button class="btn btn-primary mb-3" type="submit">Guardar</button>
+        <a class="btn btn-outline-primary mb-3" href="{% url 'ventas' %}">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

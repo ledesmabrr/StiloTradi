@@ -1,4 +1,4 @@
-{% include 'navbar.html' %} 
+
 {% include 'base.html' %} 
 {% block content %} 
 {% load bootstrap5 %}
@@ -6,7 +6,7 @@
 <!DOCTYPE html>
     
     <div class="d-flex justify-content-end  align-items-end">
-        <a class="btn btn-primary custom-btn" href="/proveedor/NuevoProveedor/">Nuevo</a></td>
+        <a class="btn btn-primary custom-btn" href="{% url 'ProveedorNuevo' %}">Nuevo</a></td>
     </div>
 <head>
    
@@ -23,17 +23,15 @@
                         <th>Nombre</th>
                         <th>Localidad</th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </tr>
             </thead>
             <tbody>
                 {% for proveedor in proveedor %}
-                <tr style ="cursor: pointer;" onclick="window.location.href='proveedor/detalleProveedor/{{ proveedor.id }}'">
+                <tr style ="cursor: pointer;" onclick="window.location.href='/proveedor/ProveedorModif/{{proveedor.id}}'">
                     <td>{{ proveedor.Nombre}}</td>
                     <td>{{ proveedor.Localidad}}</td>
-                    <td class="d-flex justify-content-end  align-items-end"><a class="btn custom-btn3" href="/proveedor/ModificarProveedor/{{proveedor.id}}">Modificar</a></td>
-                    <td><a class="btn custom-btn2" href="/proveedor/EliminarProveedor/{{proveedor.id}}">Borrar</a></td> </td>
+                    <td><a class="btn custom-btn2" href="/proveedor/ProveedorBorrar/{{proveedor.id}}">Borrar</a></td> </td>
                 </tr>
                 {% endfor %}
             </tbody> 
