@@ -1,10 +1,16 @@
-
 {% include 'base.html' %} 
 {% block content %} 
 {% load bootstrap5 %}
 {% load static %}
 <!DOCTYPE html>
-    
+<div class="d-flex justify-content-end align-items-end mb-3">
+    <form method="GET" action="{% url 'vendedoresLista' %}">
+        <div class="input-group">
+            <input type="text" class="form-control inputApagado" name="q" value="{{ query }}" placeholder="Buscar producto...">
+            <button class="btn btn-primary text-light" type="submit">Buscar</button>
+        </div>
+    </form>
+</div> 
     <div class="d-flex justify-content-end  align-items-end">
         <a class="btn btn-primary custom-btn" href="/vendedores/NuevoVendedores/">Nuevo</a></td>
     </div>
@@ -16,7 +22,7 @@
 <body>
     <div class="container">
         <h1>Vendedores</h1> 
-        <table class="table">
+        <table class="table table-striped table-hover">
             <thead>
                 <tr>
                     <tr>

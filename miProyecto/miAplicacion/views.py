@@ -3,9 +3,8 @@ from django.urls import reverse_lazy
 from django.forms import formset_factory
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.http import HttpResponse,HttpResponseRedirect
-from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas,VentaProd
-from .forms import VendedoresForm, ClientesForm, ProductosForm, ProveedorForm,VentaProdForm,VentasForm,CompraForm   
-
+from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas
+from .forms import VendedoresForm, ClientesForm, ProductosForm, ProveedorForm,VentasForm,CompraForm,VentaProdForm 
 
 # Create your views here.
 def main(request):
@@ -24,37 +23,6 @@ def main(request):
                'ventas':ventas}
     
     return render(request, 'main.html', context)
-
-
-def detalleProducto(request, pk):
-    producto = Producto.objects.get(id=pk)
-    context = {'producto': producto}
-    return render(request, 'detalleProducto.html', context)
-
-def detalleProveedor(request, pk):
-    proveedor = Proveedor.objects.get(id=pk)
-    context = {'proveedor': proveedor}
-    return render(request, 'detalleProveedor.html', context)
-
-def detalleCompra(request, pk):
-    compra = Compra.objects.get(id=pk)
-    context = {'compra': compra}
-    return render(request, 'detalleCompra.html', context)
-
-def detalleVendedores(request, pk):
-    vendedores = Vendedores.objects.get(id=pk)
-    context = {'vendedores': vendedores}
-    return render(request, 'detalleVendedores.html', context)
-
-def detalleCliente(request, pk):
-    cliente = Cliente.objects.get(id=pk)
-    context = {"cliente": cliente}
-    return render(request, "detalleCliente.html",context)
-
-def detalleVentas(request, pk):
-    ventas = Ventas.objects.get(id=pk)
-    context = {"ventas": ventas}
-    return render(request, "detalleVentas.html",context)
 
 def tabla_cliente(request):
     cliente = Cliente.objects.all()
@@ -121,11 +89,27 @@ def VendedoresEliminar(request, pk):
         return HttpResponseRedirect(reverse('vendedores'))
     return render(request, 'borrarVendedores.html', {'vendedores': vendedores})
 
+class VendedoresLista(ListView):
+    model = Vendedores
+    template_name = 'Vendedores.html'
+    context_object_name = 'Vendedores'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Vendedores.objects.filter(Nombre__startswith=query)
+        return Vendedores.objects.all()
 
 class ProveedorLista(ListView):
     model = Proveedor
     template_name = 'Proveedor.html'
     context_object_name = 'proveedor'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Proveedor.objects.filter(Nombre__startswith=query)
+        return Proveedor.objects.all()
 
 class ProveedorNuevo(CreateView):
     model = Proveedor
@@ -149,6 +133,13 @@ class ClienteLista(ListView):
     model = Cliente
     template_name = 'Cliente.html'
     context_object_name = 'cliente'
+    paginate_by = 5
+    
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Cliente.objects.filter(Nombre__startswith=query)
+        return Cliente.objects.all()
 
 class ClienteNuevo(CreateView):
     model = Cliente
@@ -167,12 +158,6 @@ class ClienteBorrar(DeleteView):
     template_name = 'borrarCliente.html'
     success_url = reverse_lazy('cliente')
 
-
-class ProductoLista(ListView):
-    model = Producto
-    template_name = 'Producto.html'
-    context_object_name = 'productos'
-
 class ProductoNuevo(CreateView):
     model = Producto
     form_class = ProductosForm
@@ -190,7 +175,17 @@ class ProductoBorrar(DeleteView):
     template_name = 'borrarProducto.html'
     success_url = reverse_lazy('producto')
 
+class ProductoLista(ListView):
+    model = Producto
+    template_name = 'producto.html'
+    context_object_name = 'producto'
 
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Producto.objects.filter(TipoProducto__startswith=query)
+        return Producto.objects.all()
+  
 class VentasNuevo(CreateView):
     model = Ventas
     form_class = VentasForm   
@@ -199,12 +194,13 @@ class VentasNuevo(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['formset'] = VentasForm.VentaProdFormset(self.request.POST)
-        else:
-            context['formset'] = VentasForm.VentaProdFormset()
-        return context
 
+        if self.request.POST:
+            context['formset'] = VentasForm.TotalVenta(self.request.POST)
+        else:
+            context['formset'] = VentasForm.TotalVenta()
+        return context
+    
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
@@ -215,20 +211,28 @@ class VentasNuevo(CreateView):
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form))
-
+        
 
 class VentasModif(UpdateView):
     model = Ventas
     form_class = VentasForm
     template_name = 'VentaProd.html'
-    success_url = reverse_lazy('ventas')
+    #success_url = reverse_lazy('ventas')
+
+    def get_success_url(self) -> str:
+        return self.request.path
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        Ventas = self.object
+        TotalGeneral = Ventas.VentaProd_set.aggregate(sum("total"))["total__sum"] or 0
+        context["TotalGeneral"] = TotalGeneral
+
         if self.request.POST:
-            context['formset'] = VentasForm.VentaProdFormset(self.request.POST, instance=self.object)
+            context['formset'] = VentasForm.TotalVenta(self.request.POST, instance=self.object)
         else:
-            context['formset'] = VentasForm.VentaProdFormset(instance=self.object)
+            context['formset'] = VentasForm.TotalVenta(instance=self.object)
         return context
 
     def form_valid(self, form):
@@ -240,18 +244,28 @@ class VentasModif(UpdateView):
         else:
             return self.render_to_response(self.get_context_data(form=form))
 
+class VentasLista(ListView):
+    model = Ventas
+    template_name = 'ventas.html'
+    context_object_name = 'ventas'
 
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Ventas.objects.filter(Fecha__startswith=query)
+        return Ventas.objects.all()
+    
+class ComprasLista(ListView):
+    model = Compra
+    template_name = 'compra.html'
+    context_object_name = 'compra'
 
-
-
-
-
-
-
-
-
-
-
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Compra.objects.filter(Fecha__startswith=query)
+        return Compra.objects.all()    
+    
 class CompraNuevo(CreateView):
     model = Compra
     form_class = CompraForm   

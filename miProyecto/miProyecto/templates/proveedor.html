@@ -1,27 +1,35 @@
-
 {% include 'base.html' %} 
 {% block content %} 
 {% load bootstrap5 %}
 {% load static %}
 <!DOCTYPE html>
-    
+<div class="d-flex justify-content-end align-items-end mb-3">
+    <form method="GET" action="{% url 'proveedorLista' %}">
+        <div class="input-group">
+            <input type="text" class="form-control inputApagado" name="q" value="{{ query }}" placeholder="Buscar Proveedor...">
+            <button class="btn btn-primary text-light" type="submit">Buscar</button>
+        </div>
+    </form>
+</div>
+
     <div class="d-flex justify-content-end  align-items-end">
-        <a class="btn btn-primary custom-btn" href="{% url 'ProveedorNuevo' %}">Nuevo</a></td>
+        <a class="btn btn-primary custom-btn" href="{% url 'ProveedorNuevo' %}">Nuevo</a></td> 
     </div>
 <head>
-   
     <!-- Incluye los estilos de Bootstrap -->
     {% bootstrap_css %}
 </head>
 <body>
     <div class="container"> 
         <h1>Proveedores</h1>
-        <table class="table">
+        <table class="table rounded table-striped table-hover">
             <thead>
                 <tr>
                     <tr>
                         <th>Nombre</th>
+                        <th>Telefono</th>
                         <th>Localidad</th>
+                        <th>Email</th>
                         <th></th>
                     </tr>
                 </tr>
@@ -30,7 +38,9 @@
                 {% for proveedor in proveedor %}
                 <tr style ="cursor: pointer;" onclick="window.location.href='/proveedor/ProveedorModif/{{proveedor.id}}'">
                     <td>{{ proveedor.Nombre}}</td>
+                    <td>{{ proveedor.Telefono}}</a></td>
                     <td>{{ proveedor.Localidad}}</td>
+                    <td>{{ proveedor.Email}}</a></td>
                     <td><a class="btn custom-btn2" href="/proveedor/ProveedorBorrar/{{proveedor.id}}">Borrar</a></td> </td>
                 </tr>
                 {% endfor %}

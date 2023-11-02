@@ -1,7 +1,5 @@
 from django.db import models
-
 # Create your models here.
-
 class Producto(models.Model):
     TipoProducto = models.CharField (max_length=50)
     Descripcion = models.CharField (max_length=50)
@@ -10,11 +8,14 @@ class Producto(models.Model):
     Marca = models.CharField (max_length=50)
     PrecioCompra = models.FloatField ()    
     PrecioVenta = models.FloatField ()
-    Stock = models.IntegerField ()
-    
+    Stock = models.IntegerField () 
+     
     def __str__(self) -> str:
-        return self. TipoProducto 
-
+        return f'{self.TipoProducto} - {self.Descripcion} - {self.Talle}'
+    
+    class Meta:
+        ordering = ['TipoProducto', 'Descripcion']   
+    
 class Proveedor(models.Model):
     Nombre = models.CharField (max_length=50)
     Telefono = models.IntegerField ()
@@ -26,7 +27,7 @@ class Proveedor(models.Model):
     
 class Compra(models.Model):
     Proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    Talle = models.CharField (max_length=50, choices=[('S', 'S' ),('M','M'),('L','L'),('XL','XL'),('XXL','XXL')])
+    Fecha = models.DateField ()
 
 
 class Vendedores(models.Model):
@@ -51,13 +52,16 @@ class Ventas(models.Model):
     Cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     TipoVenta = models.CharField (max_length=50)
     TipoPago = models.CharField (max_length=50)
-    Total = models.FloatField ()
     Fecha = models.DateField ()
 
 class VentaProd(models.Model): 
     Producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     Ventas = models.ForeignKey(Ventas, on_delete=models.CASCADE) 
+    Cantidad = models.IntegerField (default=0)
+    Total = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)
 
 class CompraProd(models.Model): 
     Compra=  models.ForeignKey(Compra, on_delete=models.CASCADE)
     Producto=  models.ForeignKey(Producto, on_delete=models.CASCADE)
+    Cantidad = models.IntegerField (default=0)
+    Total = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)

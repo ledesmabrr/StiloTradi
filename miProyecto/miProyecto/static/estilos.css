@@ -45,13 +45,10 @@
     color:#ffffff;
 }
 /* Estilo cuando el cursor está sobre el botón Modificar */
-
 .btn.custom-btn3:hover {
     background-color: #ff6600;;
     color:#ffffff;
 }
-
-
 .btn.custom-btn-aceptar{
     background-color: #4CAF50; 
     color:#ffffff; 
@@ -70,11 +67,9 @@
     background-color:  #f80000;
     color:#ffffff;
 }
-
 .detalle{
     text-align: center;
 }
-
 .navbar .navbar-expand-lg{
     background-color: #000000;
     margin: 0rem;
@@ -96,46 +91,40 @@ footer{
     bottom: 0;
     width: 100vw;
 }
-
-
 #search{
     color: #ffffff;
     border: .0625rem solid #ffffff;
 }
-
 #search:active{
     color: #ffffff;
     background-color: #ffffff;
 }
-
-
 /* Estilos generales para la tabla */
-.table {
+.table .table-striped .table-hover{
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid #dddddd;
-    font-size: 14px;
+    font-size: 14px; 
     top:100px;
+    border-radius: 10px; 
 }
-
 /* Estilos para los encabezados de la tabla */
 .table thead th {
-    border: 1px solid #dddddd;
+    border: 1px solid #dddddd; 
     padding: 8px;
     text-align: center;
     background-color: #000000;
     color: #ffffff;
 }
-
 /* Estilos para las celdas de datos */
 .table td {
     border: 1px solid #dddddd;
     padding: 8px;
 }
-
 .content{
     flex: 1;
 }
-
-
+.custom-form{
+    margin: 100px;
+    font-size: 16px;
+}
 

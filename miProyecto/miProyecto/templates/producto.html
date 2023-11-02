@@ -3,22 +3,31 @@
 {% load bootstrap5 %}
 {% load static %}
 <!DOCTYPE html>
-    
-    <div class="d-flex justify-content-end  align-items-end">
-        <a class="btn btn-primary custom-btn" href="{% url 'productoNuevo' %}">Nuevo</a></td>
-    </div>
+<div class="d-flex justify-content-end align-items-end mb-3">
+    <form method="GET" action="{% url 'productoLista' %}">
+        <div class="input-group">
+            <input type="text" class="form-control inputApagado" name="q" value="{{ query }}" placeholder="Buscar producto...">
+            <button class="btn btn-primary text-light" type="submit">Buscar</button>
+        </div>
+    </form> 
+</div>
+
+<div class="d-flex justify-content-end  align-items-end">
+    <a class="btn btn-primary custom-btn" href="{% url 'productoNuevo' %}">Nuevo</a></td>
+</div>
 <head>
     <!-- Incluye los estilos de Bootstrap -->
     {% bootstrap_css %}
 </head>
+
 <body>
-    <div class="container">
+    <div class="container"> 
         <h1>Productos</h1>
-        <table class="table">
+        <table class="table rounded-1">
             <thead>
                 <tr>
                     <tr>
-                        <th>TipoProducto</th>
+                        <th>TipoProducto</th> 
                         <th>Descripcion</th>
                         <th>Talle</th>
                         <th>Color</th>
@@ -30,7 +39,7 @@
                         
                     </tr>
                 </tr>
-            </thead>
+            </thead> 
             <tbody> 
                 {% for producto in producto %}
                 <tr style ="cursor: pointer;" onclick="window.location.href='/producto/ProductoModif/{{producto.id}}'">
@@ -39,8 +48,8 @@
                     <td>{{ producto.Talle}}</td>
                     <td>{{ producto.Color}}</td>
                     <td>{{ producto.Marca}}</td>
-                    <td>{{ producto.PrecioCompra}}</td>
-                    <td>{{ producto.PrecioVenta}}</td>
+                    <td>${{ producto.PrecioCompra}}</td>
+                    <td>${{ producto.PrecioVenta}}</td>
                     <td>{{ producto.Stock}}</td>
                     <td><a class="btn custom-btn2" href="/producto/ProductoBorrar/{{producto.id}}">Borrar</a></td> </td>
                 {% endfor %}

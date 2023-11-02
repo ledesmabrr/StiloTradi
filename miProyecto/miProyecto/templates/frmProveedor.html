@@ -1,15 +1,14 @@
-<!-- Tipo de Formulario 2-->
-{% extends 'navbar.html' %} 
-{% load static %}
-{% block content %}
-
-<div class="row">
-       <h3 class="display-4 my-3">Proveedor</h3>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn custom-btn-aceptar" type="submit">Guardar</button>
-            <a class="btn custom-btn-cancelar" href="{% url 'proveedor' %}">Cancelar</a>
-        </form>
+{% include 'base.html' %} 
+{% block content %} 
+{% load bootstrap5 %}
+{% load static %} 
+<div class="container">
+    <h3 class="display-4 my-3">Proveedor #{{ proveedor.id }}</h3>
+    <form  method="POST" enctype="multipart/form-data" > 
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn custom-btn-aceptar" type="submit">Guardar</button>
+        <a class="btn custom-btn-cancelar" href="{% url 'proveedor' %}">Cancelar</a>
+    </form>
 </div>
 {% endblock %}
