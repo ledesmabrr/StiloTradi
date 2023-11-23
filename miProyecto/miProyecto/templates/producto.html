@@ -11,10 +11,10 @@
         </div>
     </form> 
 </div>
+    <div class="d-flex justify-content-end  align-items-end">
+        <a class="btn btn-primary custom-btn" href="{% url 'productoNuevo' %}">Nuevo</a></td>
+    </div>
 
-<div class="d-flex justify-content-end  align-items-end">
-    <a class="btn btn-primary custom-btn" href="{% url 'productoNuevo' %}">Nuevo</a></td>
-</div>
 <head>
     <!-- Incluye los estilos de Bootstrap -->
     {% bootstrap_css %}
@@ -23,7 +23,7 @@
 <body>
     <div class="container"> 
         <h1>Productos</h1>
-        <table class="table rounded-1">
+        <table class="tabla-redondeada">
             <thead>
                 <tr>
                     <tr>
@@ -41,7 +41,7 @@
                 </tr>
             </thead> 
             <tbody> 
-                {% for producto in producto %}
+                {% for producto in productos %}
                 <tr style ="cursor: pointer;" onclick="window.location.href='/producto/ProductoModif/{{producto.id}}'">
                     <td>{{ producto.TipoProducto}}</a></td>
                     <td>{{ producto.Descripcion}}</td>
@@ -56,6 +56,36 @@
             </tbody>
         </table>
     </div>
+    
+    <div class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-primary mb-3" href="?page=1">Primera</a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.previous_page_number }}">
+                Anterior
+            </a>
+        {% endif %}
+    
+        <span class="current-page btn btn-outline-light disabled text-primary mb-3">
+            {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+    
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.next_page_number }}">
+                Siguiente
+            </a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.paginator.num_pages }}">
+                Última
+            </a>
+        {% endif %}
+    </div>
+
+
+    <!-- {% if perms.aplicacion.change_Producto %}
+    <td><a href="/producto/ProductoModif/{{TipoProducto.id}}">{{ p.TipoProducto }}</a></td>
+    {% else %}
+    <td>{{ p.TipoProducto }}</td>
+    {% endif %}  --> 
+
     <!-- Incluye los scripts de Bootstrap al final del cuerpo -->
     {% bootstrap_javascript %}
 </body>

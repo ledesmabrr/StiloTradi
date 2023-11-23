@@ -11,10 +11,10 @@
         </div>
     </form>
 </div>
-
     <div class="d-flex justify-content-end  align-items-end">
         <a class="btn btn-primary custom-btn" href="{% url 'ProveedorNuevo' %}">Nuevo</a></td> 
     </div>
+
 <head>
     <!-- Incluye los estilos de Bootstrap -->
     {% bootstrap_css %}
@@ -47,6 +47,30 @@
             </tbody> 
         </table>
     </div>
+
+
+    <div class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-primary mb-3" href="?page=1">Primera</a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.previous_page_number }}">
+                Anterior
+            </a>
+        {% endif %}
+    
+        <span class="current-page btn btn-outline-light disabled text-primary mb-3">
+            {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+    
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.next_page_number }}">
+                Siguiente
+            </a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.paginator.num_pages }}">
+                Última
+            </a>
+        {% endif %}
+    </div>
+
     <!-- Incluye los scripts de Bootstrap al final del cuerpo -->
     {% bootstrap_javascript %}
 </body>

@@ -1,28 +1,90 @@
 .encabezado{
     height: 100px;
 }
+body{
+    margin: 0;
+    padding: 0;
+}
+.custom-btn-logo{
+    margin-left: 1200px;
+    margin-top: -40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: none; /* Quita el borde del botón */
+}
 
+.mi-contenedor-login{
+    background-color: #f5f5f5;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 400px;
+    height: 400px;
+    margin-left: 350px;
+    text-align: center;
+}
+
+.form-control{
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+.boton-login {
+    background-color: black; /* Fondo negro */
+    color: white; /* Texto blanco */
+    border: none; /* Sin borde */
+    border-radius: 40px; /* Bordes redondeados */
+    padding: 5px 70px;
+    margin-top: 10px;  /* Ajusta la distancia superior */
+    cursor: pointer;
+    font-weight: bold; /* Texto en negrita */    
+}
+
+.boton-login:hover {
+    background-color: #333; /* Color de fondo oscuro al pasar el cursor */
+}
+
+.mi-contenedor{
+    background-color: #f5f5f5;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input, select, textarea {
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+  
 /* Estilos generales para el botón Guardar */
 .styled-button3 {
     background-color: #4CAF50;
     margin: 10px;
 }
+
 /* Estilo cuando el cursor está sobre el botón Guardar */
 .styled-button3:hover {
     background-color:  #09b60f;
     color:#ffffff;
 }
+
 /* Estilos generales para el botón Borrar */
 .btn.custom-btn2 {
     background-color: rgb(216, 33, 33);
     color:#ffffff;
-    
 }
+
 /* Estilo cuando el cursor está sobre el botón Borrar */
 .btn.custom-btn2:hover {
     background-color:  #f80000;
     color:#ffffff;
 }
+
 /* Estilos generales para el botón Nuevo */
 .btn.custom-btn {
     background-color: rgb(241, 241, 241);
@@ -33,49 +95,59 @@
     padding-left: 40px;
     padding-right: 40px;
 }
+
 /* Estilo cuando el cursor está sobre el botón Nuevo */
 .btn.custom-btn:hover {
     background-color: rgb(8, 106, 218);
     color:#ffffff;
     
 }
+
 /* Estilos generales para el botón Modificar */
 .btn.custom-btn3 {
     background-color:  #f37623;
     color:#ffffff;
 }
+
 /* Estilo cuando el cursor está sobre el botón Modificar */
 .btn.custom-btn3:hover {
     background-color: #ff6600;;
     color:#ffffff;
 }
+
 .btn.custom-btn-aceptar{
     background-color: #4CAF50; 
     color:#ffffff; 
 }
+
 /* Estilo cuando el cursor está sobre el botón Aceptar */
 .btn.custom-btn-aceptar:hover {
     background-color:  #09b60f;
     color:#ffffff;
 }
+
 .btn.custom-btn-cancelar{
     background-color: rgb(216, 33, 33);
     color:#ffffff;
 }
+
 /* Estilo cuando el cursor está sobre el botón Cancelar */
 .btn.custom-btn-cancelar:hover {
     background-color:  #f80000;
     color:#ffffff;
 }
+
 .detalle{
     text-align: center;
 }
+
 .navbar .navbar-expand-lg{
     background-color: #000000;
     margin: 0rem;
     color: #ffffff;
     margin-top: 50px;
 }
+
 .nav-item {
     color: #000000;
 }
@@ -84,29 +156,39 @@ header{
     background-color:#000000 ;
     text-align: center;
 }
+
 footer{
     background-color: #000000;
     color: #ffffff;
     position:fixed;
     bottom: 0;
-    width: 100vw;
+    position: fixed;
+    bottom: 0;
+    height: 30px; /* Establece la altura del pie de página a 100 píxeles */
+    width: 100%;   /* Establece el ancho del pie de página al 100% del contenedor padre */
+   
+
 }
+
+
 #search{
     color: #ffffff;
     border: .0625rem solid #ffffff;
 }
+
 #search:active{
     color: #ffffff;
     background-color: #ffffff;
 }
+
 /* Estilos generales para la tabla */
 .table .table-striped .table-hover{
-    width: 100%;
     border-collapse: collapse;
-    font-size: 14px; 
-    top:100px;
     border-radius: 10px; 
+    border: 1px solid #dee2e6;
+  
 }
+
 /* Estilos para los encabezados de la tabla */
 .table thead th {
     border: 1px solid #dddddd; 
@@ -114,17 +196,80 @@ footer{
     text-align: center;
     background-color: #000000;
     color: #ffffff;
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
 }
+
 /* Estilos para las celdas de datos */
 .table td {
     border: 1px solid #dddddd;
     padding: 8px;
 }
+
+.tabla-redondeada {
+    border-collapse: collapse;
+    border: 1px solid #dee2e6;
+    border-radius: 5px; /* Aplica bordes redondeados */
+}
+  
+.tabla-redondeada th,
+.tabla-redondeada td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+    
+}
+  
+.tabla-redondeada thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+    background-color:#000000;
+    color: #ffffff;    
+}
+  
+.tabla-redondeada tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+/* Estilo para alternar colores de filas (opcional) */
+.tabla-redondeada tbody tr:nth-child(odd) {
+    background-color: #f8f9fa;
+}
+
 .content{
     flex: 1;
 }
+
 .custom-form{
     margin: 100px;
     font-size: 16px;
 }
 
+.formularios{
+    width: 80%;
+    margin:auto;
+    margin-top: 2rem;
+    background-color: var(--color-white);
+    border-radius:2.5rem ;
+    box-shadow: 0.05rem 0.05rem 4rem var(--color-background);
+}
+
+.table{
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #dee2e6;
+}
+
+.instagram-logo {
+    display: inline-block;
+    margin: 0 10px; /* Ajusta los márgenes según sea necesario */
+    margin-top: 507px;
+    margin-left: -35px;
+  }
+  
+  .instagram-logo img {
+    width: 46px; /* Ajusta el tamaño del logotipo según sea necesario */
+    height: 30px;
+    vertical-align: middle; /* Centra verticalmente el logotipo */
+  }
+  

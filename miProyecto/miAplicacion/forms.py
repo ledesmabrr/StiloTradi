@@ -72,18 +72,18 @@ class VentasForm(forms.ModelForm):
             'Fecha': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }
 
-    VentaProdFormset = forms.inlineformset_factory(Ventas,VentaProd, form=VentaProdForm, extra=5)
+    VentaProdFormset = forms.inlineformset_factory(Ventas,VentaProd,  form=VentaProdForm, extra=5)
 
     class TotalVenta(VentaProdFormset):
         def clean(self):
             super().clean()
             for form in self.forms:
-                cantidad = form.cleaned_data.get("cantidad")
+                cantidad = form.cleaned_data.get("Cantidad")
                 if cantidad is not None:
-                    PrecioVenta = form.intance.TipoProducto.PrecioVenta
+                    PrecioVenta = form.instance.TipoProducto.PrecioVenta
                     total = cantidad * PrecioVenta
-                    form.instance.precio = PrecioVenta
-                    form.instance.total = total
+                    form.instance.PrecioVenta = PrecioVenta
+                    form.instance.Total = total
 
 
 class CompraProdForm(forms.ModelForm):

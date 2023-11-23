@@ -1,7 +1,7 @@
-{% include 'navbar.html' %}  
+{% include 'base.html' %}  
 {% block content %} 
 {% load static %} 
-<body>
+
     <div class="detalle">
         <h1>Borrar productos</h1>
 
@@ -10,10 +10,10 @@
             {% csrf_token %}
             
             <button type="submit" class="btn custom-btn-aceptar">Aceptar</button>                  
-            <a class="btn custom-btn-cancelar" href="/producto/">Cancelar</a>
+            <a class="btn custom-btn-cancelar" href="/producto/ProductoLista">Cancelar</a>
         </form>
-    </div>
+   </div>
     
-</body>
+
 </html>
 {% endblock %} 

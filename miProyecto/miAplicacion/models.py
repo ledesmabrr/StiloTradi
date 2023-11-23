@@ -56,7 +56,7 @@ class Ventas(models.Model):
 
 class VentaProd(models.Model): 
     Producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    Ventas = models.ForeignKey(Ventas, on_delete=models.CASCADE) 
+    Ventas = models.ForeignKey (Ventas, on_delete=models.CASCADE, related_name='ventaprod_set')  
     Cantidad = models.IntegerField (default=0)
     Total = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)
 

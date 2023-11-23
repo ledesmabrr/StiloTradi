@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="mi-contenedor-login">
+    <div class="container mt-5 " >
+        <div class="row">
+            <h3 class="col display-4 my-3">Bienvenidos</h3>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="container">
+                    <input type="text" placeholder="Usuario" class="form-control" id="username" name="username" value="">
+                </div>
+                <div class="container">
+                    <input type="password" placeholder="Contraseña" class="form-control" id="password" name="password"  >
+                </div>
+                <a class=" boton-login " href="{% url 'main' %}">Enviar </a>
+                
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

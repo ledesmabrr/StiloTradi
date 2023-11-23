@@ -14,6 +14,8 @@
     <div class="d-flex justify-content-end  align-items-end">
         <a class="btn btn-primary custom-btn" href="/vendedores/NuevoVendedores/">Nuevo</a></td>
     </div>
+
+    
 <head>
    
     <!-- Incluye los estilos de Bootstrap -->
@@ -34,18 +36,40 @@
                 </tr>
             </thead>
             <tbody>
-                {% for vendedores in vendedores %}
-                <tr style ="cursor: pointer;" onclick="window.location.href='/vendedores/ModificarVendedor/{{vendedores.id}}'">
-                    <td>{{ vendedores.Nombre}}</td>
-                    <td>{{ vendedores.Telefono}}</td>
-                    <td>{{ vendedores.Direccion}}</td>
+                {% for vendedor in vendedores %}
+                <tr style ="cursor: pointer;" onclick="window.location.href='/vendedores/VendedoresModif/{{vendedor.id}}'">
+                    <td>{{ vendedor.Nombre}}</td>
+                    <td>{{ vendedor.Telefono}}</td>
+                    <td>{{ vendedor.Direccion}}</td>
                    
-                    <td><a class="btn custom-btn2" href="/vendedores/EliminarVendedor/{{vendedores.id}}">Borrar</a></td> </td>
+                    <td><a class="btn custom-btn2" href="/vendedores/VendedoresBorrar/{{vendedor.id}}">Borrar</a></td> </td>
                 </tr>
                 {% endfor %}
             </tbody> 
         </table>
     </div>
+    <div class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-primary mb-3" href="?page=1">Primera</a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.previous_page_number }}">
+                Anterior
+            </a>
+        {% endif %}
+    
+        <span class="current-page btn btn-outline-light disabled text-primary mb-3">
+            {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+    
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.next_page_number }}">
+                Siguiente
+            </a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.paginator.num_pages }}">
+                Última
+            </a>
+        {% endif %}
+    </div>
+
     <!-- Incluye los scripts de Bootstrap al final del cuerpo -->
     {% bootstrap_javascript %}
 </body>

@@ -15,11 +15,14 @@
             <thead class="bg-dark text-light">
                 <th>Id</th>
                 <th>TipoProducto</th>
-                <th>PrecioVenta</th>
+                <th></th>
                 <th>Cantidad</th>
-                <th></th>
-                <th></th>
+
+                <th>PrecioVenta</th>
+                
                 <th>¿Borrar?</th>
+                <th></th>
+                
             </thead>
             <tbody>
             {% for form in formset %}
@@ -30,16 +33,16 @@
                 {% endfor %}               
             </tr>
             {% endfor %}
+            
             </thead class="bg-dark text-light">
             <th></th>
             <th></th>
-            <th></th>
-            <th>Total general: {{Total}}</th>
+            <th>Total general: {{ total }}</th>
           
             </tbody>
         </table>
-        <button class="btn btn-primary mb-3" type="submit">Guardar</button>
-        <a class="btn btn-outline-primary mb-3" href="{% url 'ventas' %}">Cancelar</a>
+        <button class="btn btn-primary mb-3"  type="submit">Guardar</button>
+        <a class="btn btn-outline-primary mb-3" href="/ventas/VentasLista/">Cancelar</a>
     </form>
 </div>
 {% endblock %}
