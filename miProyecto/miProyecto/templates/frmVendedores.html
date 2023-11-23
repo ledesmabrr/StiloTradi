@@ -1,14 +1,17 @@
 {% extends 'navbar.html' %} 
 {% load static %}
 {% block content %} 
-
-<div class="row">
-       <h3 class="display-4 my-3">Vendedores</h3>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn custom-btn-aceptar" type="submit">Guardar</button>
-            <a class="btn custom-btn-cancelar" href="{% url 'vendedores' %}">Cancelar</a>
-        </form>
-</div>
+<div class="mi-contenedor">
+    <div class="container mt-5">
+        <div class="row">
+            <h3 class="display-4 my-3">Vendedores</h3>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn custom-btn-aceptar" type="submit">Guardar</button>
+                    <a class="btn custom-btn-cancelar" href="/vendedores/VendedoresLista">Cancelar</a>
+                </form>
+        </div>
+    </div>
+</div>    
 {% endblock %}

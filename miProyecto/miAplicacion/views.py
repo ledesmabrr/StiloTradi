@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from msilib import Table
 from django.shortcuts import render, reverse
 from django.urls import reverse_lazy
@@ -17,6 +18,23 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph,Table, TableStyle
+=======
+import queue
+from telnetlib import LOGOUT
+from django.contrib.auth.mixins import PermissionRequiredMixin 
+from django.shortcuts import redirect, render, reverse
+from django.urls import reverse_lazy
+from django.forms import formset_factory
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView,View
+from django.http import HttpResponse,HttpResponseRedirect
+from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas
+from django.db.models import Q
+from django.db.models import Sum
+from .forms import VendedoresForm, ClientesForm, ProductosForm, ProveedorForm,VentasForm,CompraForm,VentaProdForm 
+from django.contrib.auth.views import LoginView
+
+#from .mixins import PermissionRequiredMixin
+>>>>>>> 059f35930230ac4bbdb232f8bbd91693a6044f64
 
 # Create your views here.
 def main(request):
@@ -72,145 +90,153 @@ def index(request):
     f"<p>Este es un sistema de venta de ropa</p>"
     return HttpResponse(mensaje)
 
+class VendedoresModif(UpdateView):
+    model = Vendedores 
+    form_class = VendedoresForm
+    template_name = 'frmVendedores.html'
+    success_url = reverse_lazy('vendedoresLista')
 
-def VendedoresModif(request, pk):
-    vendedores = Vendedores.objects.get(id=pk)
-    if request.method == 'POST':
-        form = VendedoresForm(request.POST, instance=vendedores)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('vendedores'))
-    else:
-        form = VendedoresForm(instance=vendedores)
-    return render(request, 'frmVendedores.html', {'form': form, 'vendedores': vendedores})
     
-def VendedoresNuevo(request):
-    if request.method == 'POST':
-        form = VendedoresForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('vendedores'))
-    else:
-        form = VendedoresForm()
-    return render(request, 'frmVendedores.html', {'form': form})
+class VendedoresNuevo(CreateView):
+    model = Vendedores
+    form_class = VendedoresForm
+    template_name = 'frmVendedores.html'
+    success_url = reverse_lazy('vendedoresLista')
 
-def VendedoresEliminar(request, pk):
-    vendedores = Vendedores.objects.get(id=pk)
-    if request.method == 'POST':
-        vendedores.delete()
-        return HttpResponseRedirect(reverse('vendedores'))
-    return render(request, 'borrarVendedores.html', {'vendedores': vendedores})
+class VendedoresBorrar(DeleteView):
+    model = Vendedores
+    template_name = 'borrarVendedores.html'
+    success_url = reverse_lazy('vendedoresLista')
+
 
 class VendedoresLista(ListView):
     model = Vendedores
     template_name = 'Vendedores.html'
-    context_object_name = 'Vendedores'
+    context_object_name = 'vendedores'
+    paginate_by = 3  # Cantidad de elementos por página
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query:
-            return Vendedores.objects.filter(Nombre__startswith=query)
-        return Vendedores.objects.all()
+        query = self.request.GET.get('q', '')
+
+        if not query: 
+            vendedores = Vendedores.objects.all()
+        else:
+            vendedores = Vendedores.objects.filter(Nombre__icontains = query)
+        return vendedores
 
 class ProveedorLista(ListView):
     model = Proveedor
     template_name = 'Proveedor.html'
     context_object_name = 'proveedor'
+    paginate_by = 3  # Cantidad de elementos por página
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query:
-            return Proveedor.objects.filter(Nombre__startswith=query)
-        return Proveedor.objects.all()
+        query = self.request.GET.get('q', '')
+
+        if not query: 
+            proveedor = Proveedor.objects.all()
+        else:
+            proveedor = Proveedor.objects.filter(Nombre__icontains = query)
+        return proveedor
 
 class ProveedorNuevo(CreateView):
     model = Proveedor
     form_class = ProveedorForm
     template_name = 'frmProveedor.html'
-    success_url = reverse_lazy('proveedor')
+    success_url = reverse_lazy('proveedorLista')
 
 class ProveedorModif(UpdateView):
     model = Proveedor 
     form_class = ProveedorForm
     template_name = 'frmProveedor.html'
-    success_url = reverse_lazy('proveedor')
+    success_url = reverse_lazy('proveedorLista')
 
 class ProveedorBorrar(DeleteView):
     model = Proveedor
     template_name = 'borrarProveedor.html'
-    success_url = reverse_lazy('proveedor')
+    success_url = reverse_lazy('proveedorLista')
 
 
 class ClienteLista(ListView):
     model = Cliente
     template_name = 'Cliente.html'
     context_object_name = 'cliente'
-    paginate_by = 5
-    
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query:
-            return Cliente.objects.filter(Nombre__startswith=query)
-        return Cliente.objects.all()
+    paginate_by = 3
 
+    def get_queryset(self):
+        query = self.request.GET.get('q', '')
+
+        if not query: 
+            cliente = Cliente.objects.all()
+        else:
+            cliente = Cliente.objects.filter(Nombre__icontains = query)
+        return cliente
+    
 class ClienteNuevo(CreateView):
     model = Cliente
     form_class = ClientesForm
     template_name = 'frmClientes.html'
-    success_url = reverse_lazy('cliente')
+    success_url = reverse_lazy('clienteLista')
 
 class ClienteModif(UpdateView):
     model = Cliente 
     form_class = ClientesForm
     template_name = 'frmClientes.html'
-    success_url = reverse_lazy('cliente')
+    success_url = reverse_lazy('clienteLista')
 
 class ClienteBorrar(DeleteView):
     model = Cliente
     template_name = 'borrarCliente.html'
-    success_url = reverse_lazy('cliente')
+    success_url = reverse_lazy('clienteLista')
 
 class ProductoNuevo(CreateView):
     model = Producto
     form_class = ProductosForm
     template_name = 'frmProductos.html'
-    success_url = reverse_lazy('producto')
+    success_url = reverse_lazy('productoLista')
 
 class ProductoModif(UpdateView):
     model = Producto 
     form_class = ProductosForm
     template_name = 'frmProductos.html'
-    success_url = reverse_lazy('producto')
+    success_url = reverse_lazy('productoLista')
+    #permission_required = 'app.change_Producto'
+
 
 class ProductoBorrar(DeleteView):
     model = Producto
     template_name = 'borrarProducto.html'
-    success_url = reverse_lazy('producto')
+    success_url = reverse_lazy('productoLista')
 
 class ProductoLista(ListView):
     model = Producto
     template_name = 'producto.html'
-    context_object_name = 'producto'
+    context_object_name = 'productos'
+    paginate_by =  3 # Cantidad de elementos por página
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query:
-            return Producto.objects.filter(TipoProducto__startswith=query)
-        return Producto.objects.all()
+        query = self.request.GET.get('q', '')
+
+        if not query: 
+            productos = Producto.objects.all()
+        else:
+            productos = Producto.objects.filter(TipoProducto__icontains = query)
+        return productos
+       
   
 class VentasNuevo(CreateView):
     model = Ventas
     form_class = VentasForm   
     template_name = 'VentaProd.html'
-    success_url = reverse_lazy('ventas')
+    success_url = reverse_lazy('ventasLista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         if self.request.POST:
-            context['formset'] = VentasForm.TotalVenta(self.request.POST)
+            context['formset'] = VentasForm.VentaProdFormset(self.request.POST)
         else:
-            context['formset'] = VentasForm.TotalVenta()
+            context['formset'] = VentasForm.VentaProdFormset()
         return context
     
     def form_valid(self, form):
@@ -229,7 +255,7 @@ class VentasModif(UpdateView):
     model = Ventas
     form_class = VentasForm
     template_name = 'VentaProd.html'
-    #success_url = reverse_lazy('ventas')
+    success_url = reverse_lazy('ventasLista')
 
     def get_success_url(self) -> str:
         return self.request.path
@@ -238,13 +264,14 @@ class VentasModif(UpdateView):
         context = super().get_context_data(**kwargs)
 
         Ventas = self.object
-        TotalGeneral = Ventas.VentaProd_set.aggregate(sum("total"))["total__sum"] or 0
+        TotalGeneral = Ventas.ventaprod_set.aggregate(total_sum= Sum("Total"))["total_sum"] or 0
+        #TotalGeneral = Ventas.ventaprod_set.aggregate(sum("total"))["total__sum"] or 0
         context["TotalGeneral"] = TotalGeneral
 
         if self.request.POST:
-            context['formset'] = VentasForm.TotalVenta(self.request.POST, instance=self.object)
+            context['formset'] = VentasForm.VentaProdFormset(self.request.POST, instance=self.object)
         else:
-            context['formset'] = VentasForm.TotalVenta(instance=self.object)
+            context['formset'] = VentasForm.VentaProdFormset(instance=self.object)
         return context
 
     def form_valid(self, form):
@@ -260,29 +287,54 @@ class VentasLista(ListView):
     model = Ventas
     template_name = 'ventas.html'
     context_object_name = 'ventas'
+    paginate_by = 3
+
+    #def get_queryset(self):
+        #query = self.request.GET.get('q')
+        #if query:
+            #return Ventas.objects.filter(Fecha__startswith=query)
+        #return Ventas.objects.all()
+    
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query:
-            return Ventas.objects.filter(Fecha__startswith=query)
-        return Ventas.objects.all()
+        query = self.request.GET.get('q', '')
+
+        if not query: 
+            ventas = Ventas.objects.all()
+        else:
+            ventas = Ventas.objects.filter(Fecha__startswith = query)
+        return ventas
+    
     
 class ComprasLista(ListView):
     model = Compra
     template_name = 'compra.html'
     context_object_name = 'compra'
+    paginate_by = 3
 
+    #def get_queryset(self):
+     #  query = self.request.GET.get('q')
+      # if query:
+            #return Compra.objects.filter(Fecha__startswith=query)
+        #return Compra.objects.all()    
+    
     def get_queryset(self):
-        query = self.request.GET.get('q')
-        if query:
-            return Compra.objects.filter(Fecha__startswith=query)
-        return Compra.objects.all()    
+        query = self.request.GET.get('q', '')
+
+        if not query: 
+            compra = Compra.objects.all()
+        else:
+            compra = Compra.objects.filter(Fecha__startswith = query)
+        return compra
+    
+
+
     
 class CompraNuevo(CreateView):
     model = Compra
     form_class = CompraForm   
     template_name = 'CompraProd.html'
-    success_url = reverse_lazy('compra')
+    success_url = reverse_lazy('comprasLista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -308,7 +360,7 @@ class CompraModif(UpdateView):
     model = Compra
     form_class = CompraForm
     template_name = 'CompraProd.html'
-    success_url = reverse_lazy('compra')
+    success_url = reverse_lazy('comprasLista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -326,6 +378,7 @@ class CompraModif(UpdateView):
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form))
+<<<<<<< HEAD
 
 
 def ventasPDF(request, venta_pk):
@@ -475,3 +528,21 @@ def comprasPDF(request, compra_pk):
 
     response = FileResponse(buf, as_attachment=True, filename=f'compra_{compra_pk}.pdf')
     return response
+=======
+        
+def Logout(request):
+    LOGOUT(request)
+    return redirect('/index')
+
+
+class PermissionRequiredMixin(View):
+    permission_required = None
+    login_url = '/login'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm(self.permission_required):
+            return HttpResponseRedirect(self.login_url)
+        return super().dispatch(request, *args, **kwargs)
+    
+
+>>>>>>> 059f35930230ac4bbdb232f8bbd91693a6044f64

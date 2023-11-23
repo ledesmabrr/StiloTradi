@@ -14,38 +14,102 @@
     <div class="d-flex justify-content-end  align-items-end">
         <a class="btn btn-primary custom-btn" href="/vendedores/NuevoVendedores/">Nuevo</a></td>
     </div>
+
+    
 <head>
-   
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        @media only screen and (max-width: 780px) {
+            table {
+                border: 1px solid #ddd;
+            }
+
+            th, td {
+                border: none;
+                border-bottom: 1px solid #ddd;
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            th {
+                text-align: left;
+                background-color: #f2f2f2;
+            }
+        }
+    </style>
+  
     <!-- Incluye los estilos de Bootstrap -->
     {% bootstrap_css %}
 </head>
 <body>
     <div class="container">
         <h1>Vendedores</h1> 
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
+        <div class="table-responsive"></div>>
+            <table class="table table-striped table-hover">
+                <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Telefono</th>
-                        <th>Direccion</th>
-                        <th></th>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Telefono</th>
+                            <th>Direccion</th>
+                            <th>Borrar</th>
+                        </tr>
                     </tr>
-                </tr>
-            </thead>
-            <tbody>
-                {% for vendedores in vendedores %}
-                <tr style ="cursor: pointer;" onclick="window.location.href='/vendedores/ModificarVendedor/{{vendedores.id}}'">
-                    <td>{{ vendedores.Nombre}}</td>
-                    <td>{{ vendedores.Telefono}}</td>
-                    <td>{{ vendedores.Direccion}}</td>
-                   
-                    <td><a class="btn custom-btn2" href="/vendedores/EliminarVendedor/{{vendedores.id}}">Borrar</a></td> </td>
-                </tr>
-                {% endfor %}
-            </tbody> 
-        </table>
+                </thead>
+                <tbody>
+                    {% for vendedor in vendedores %}
+                    <tr style ="cursor: pointer;" onclick="window.location.href='/vendedores/VendedoresModif/{{vendedor.id}}'">
+                        <td>{{ vendedor.Nombre}}</td>
+                        <td>{{ vendedor.Telefono}}</td>
+                        <td>{{ vendedor.Direccion}}</td>
+                    
+                        <td><a class="btn custom-btn2" href="/vendedores/VendedoresBorrar/{{vendedor.id}}">Borrar</a></td> </td>
+                    </tr>
+                    {% endfor %}
+                </tbody> 
+            </table>
+        </div>
     </div>
+    <div class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-primary mb-3" href="?page=1">Primera</a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.previous_page_number }}">
+                Anterior
+            </a>
+        {% endif %}
+    
+        <span class="current-page btn btn-outline-light disabled text-primary mb-3">
+            {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+    
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.next_page_number }}">
+                Siguiente
+            </a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.paginator.num_pages }}">
+                Última
+            </a>
+        {% endif %}
+    </div>
+
     <!-- Incluye los scripts de Bootstrap al final del cuerpo -->
     {% bootstrap_javascript %}
 </body>
