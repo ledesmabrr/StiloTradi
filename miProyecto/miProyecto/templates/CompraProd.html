@@ -32,6 +32,12 @@
 
         <button class="btn btn-primary mb-3" type="submit">Guardar</button>
         <a class="btn btn-outline-primary mb-3" href="{% url 'compra' %}">Cancelar</a>
+
+        {% if compra.id %}
+            <a class="btn btn-outline-primary mb-3" href="{% url 'comprasPDF' compra_pk=compra.id %}">Imprimir</a>
+        {% else %}
+            <button disabled>Imprimir</button>
+        {% endif %}
     </form>
 </div>
 
