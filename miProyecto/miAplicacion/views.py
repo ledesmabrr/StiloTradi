@@ -72,19 +72,19 @@ class VendedoresModif(UpdateView):
     model = Vendedores 
     form_class = VendedoresForm
     template_name = 'frmVendedores.html'
-    success_url = reverse_lazy('vendedores')
+    success_url = reverse_lazy('vendedoresLista')
 
     
 class VendedoresNuevo(CreateView):
     model = Vendedores
     form_class = VendedoresForm
     template_name = 'frmVendedores.html'
-    success_url = reverse_lazy('vendedores')
+    success_url = reverse_lazy('vendedoresLista')
 
 class VendedoresBorrar(DeleteView):
     model = Vendedores
     template_name = 'borrarVendedores.html'
-    success_url = reverse_lazy('vendedores')
+    success_url = reverse_lazy('vendedoresLista')
 
 
 class VendedoresLista(ListView):
@@ -121,18 +121,18 @@ class ProveedorNuevo(CreateView):
     model = Proveedor
     form_class = ProveedorForm
     template_name = 'frmProveedor.html'
-    success_url = reverse_lazy('proveedor')
+    success_url = reverse_lazy('proveedorLista')
 
 class ProveedorModif(UpdateView):
     model = Proveedor 
     form_class = ProveedorForm
     template_name = 'frmProveedor.html'
-    success_url = reverse_lazy('proveedor')
+    success_url = reverse_lazy('proveedorLista')
 
 class ProveedorBorrar(DeleteView):
     model = Proveedor
     template_name = 'borrarProveedor.html'
-    success_url = reverse_lazy('proveedor')
+    success_url = reverse_lazy('proveedorLista')
 
 
 class ClienteLista(ListView):
@@ -154,37 +154,37 @@ class ClienteNuevo(CreateView):
     model = Cliente
     form_class = ClientesForm
     template_name = 'frmClientes.html'
-    success_url = reverse_lazy('cliente')
+    success_url = reverse_lazy('clienteLista')
 
 class ClienteModif(UpdateView):
     model = Cliente 
     form_class = ClientesForm
     template_name = 'frmClientes.html'
-    success_url = reverse_lazy('cliente')
+    success_url = reverse_lazy('clienteLista')
 
 class ClienteBorrar(DeleteView):
     model = Cliente
     template_name = 'borrarCliente.html'
-    success_url = reverse_lazy('cliente')
+    success_url = reverse_lazy('clienteLista')
 
 class ProductoNuevo(CreateView):
     model = Producto
     form_class = ProductosForm
     template_name = 'frmProductos.html'
-    success_url = reverse_lazy('producto')
+    success_url = reverse_lazy('productoLista')
 
 class ProductoModif(UpdateView):
     model = Producto 
     form_class = ProductosForm
     template_name = 'frmProductos.html'
-    success_url = reverse_lazy('producto')
+    success_url = reverse_lazy('productoLista')
     #permission_required = 'app.change_Producto'
 
 
 class ProductoBorrar(DeleteView):
     model = Producto
     template_name = 'borrarProducto.html'
-    success_url = reverse_lazy('producto')
+    success_url = reverse_lazy('productoLista')
 
 class ProductoLista(ListView):
     model = Producto
@@ -206,7 +206,7 @@ class VentasNuevo(CreateView):
     model = Ventas
     form_class = VentasForm   
     template_name = 'VentaProd.html'
-    success_url = reverse_lazy('ventas')
+    success_url = reverse_lazy('ventasLista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -233,7 +233,7 @@ class VentasModif(UpdateView):
     model = Ventas
     form_class = VentasForm
     template_name = 'VentaProd.html'
-    #success_url = reverse_lazy('ventas')
+    success_url = reverse_lazy('ventasLista')
 
     def get_success_url(self) -> str:
         return self.request.path
@@ -312,7 +312,7 @@ class CompraNuevo(CreateView):
     model = Compra
     form_class = CompraForm   
     template_name = 'CompraProd.html'
-    success_url = reverse_lazy('compra')
+    success_url = reverse_lazy('comprasLista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -338,7 +338,7 @@ class CompraModif(UpdateView):
     model = Compra
     form_class = CompraForm
     template_name = 'CompraProd.html'
-    success_url = reverse_lazy('compra')
+    success_url = reverse_lazy('comprasLista')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

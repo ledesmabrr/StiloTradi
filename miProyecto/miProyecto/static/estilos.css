@@ -182,14 +182,17 @@ footer{
 }
 
 /* Estilos generales para la tabla */
+
 .table .table-striped .table-hover{
-    border-collapse: collapse;
-    border-radius: 10px; 
-    border: 1px solid #dee2e6;
-  
+        border-collapse: collapse;
+        border-radius: 40px; 
+        border: 1px solid #dee2e6;
+    
 }
 
+
 /* Estilos para los encabezados de la tabla */
+
 .table thead th {
     border: 1px solid #dddddd; 
     padding: 8px;
@@ -198,6 +201,7 @@ footer{
     color: #ffffff;
     vertical-align: bottom;
     border-bottom: 2px solid #dee2e6;
+        
 }
 
 /* Estilos para las celdas de datos */

@@ -2,47 +2,89 @@
 {% block content %} 
 {% load bootstrap5 %}
 {% load static %} 
-<div class="container">
-    <h3 class="display-4 my-3">Ventas #{{ ventas.id }}</h3>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        {{ formset.management_form }}
-
-        <h6 class="display-6 my-3">Producto</h6> 
- 
-        <table class="table table-striped table-hover"> 
-            <thead class="bg-dark text-light">
-                <th>Id</th>
-                <th>TipoProducto</th>
-                <th></th>
-                <th>Cantidad</th>
-
-                <th>PrecioVenta</th>
-                
-                <th>¿Borrar?</th>
-                <th></th>
-                
-            </thead>
-            <tbody>
-            {% for form in formset %}
-            <tr>
-                <td>{{ form.id.value }}</td>
-                {% for field in form %}
-                    <td>{{ field }}</td>
-                {% endfor %}               
-            </tr>
-            {% endfor %}
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
             
-            </thead class="bg-dark text-light">
-            <th></th>
-            <th></th>
-            <th>Total general: {{ total }}</th>
-          
-            </tbody>
-        </table>
-        <button class="btn btn-primary mb-3"  type="submit">Guardar</button>
-        <a class="btn btn-outline-primary mb-3" href="/ventas/VentasLista/">Cancelar</a>
-    </form>
-</div>
-{% endblock %}
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        @media only screen and (max-width: 780px) {
+            table {
+                border: 1px solid #ddd;
+            }
+
+            th, td {
+                border: none;
+                border-bottom: 1px solid #ddd;
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            th {
+                text-align: left;
+                background-color: #f2f2f2;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h3 class="display-4 my-3">Ventas #{{ ventas.id }}</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {{ formset.management_form }}
+
+            <h6 class="display-6 my-3">Producto</h6> 
+    
+            <table class="table table-striped table-hover"> 
+                <thead class="bg-dark text-light">
+                    <th>Id</th>
+                    <th>TipoProducto</th>
+                    <th></th>
+                    <th>Cantidad</th>
+                    <th>PrecioVenta</th>
+                    <th></th>
+                    <th>¿Borrar?</th>
+                    <th></th>
+                    
+                </thead>
+                <tbody>
+                {% for form in formset %}
+                <tr>
+                    <td>{{ form.id.value }}</td>
+                    {% for field in form %}
+                        <td>{{ field }}</td>
+                    {% endfor %}              
+                </tr>
+                {% endfor %}
+                
+                </thead class="bg-dark text-light">
+                <th></th>
+                <th></th>
+                <th>Total general: {{ total }}</th>
+            
+                </tbody>
+            </table>
+            <button class="btn btn-primary mb-3"  type="submit">Guardar</button>
+            <a class="btn btn-outline-primary mb-3" href="/ventas/VentasLista/">Cancelar</a>
+        </form>
+    </div>
+    {% endblock %}
+</body>
