@@ -184,9 +184,9 @@ footer{
 /* Estilos generales para la tabla */
 
 .table .table-striped .table-hover{
-        border-collapse: collapse;
-        border-radius: 40px; 
-        border: 1px solid #dee2e6;
+    border-collapse: collapse;
+    border-radius: 40px; 
+    border: 1px solid #dee2e6;
     
 }
 
