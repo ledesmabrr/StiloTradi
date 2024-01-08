@@ -78,6 +78,38 @@
                 </thead class="bg-dark text-light">
                 <th></th>
                 <th></th>
+<<<<<<< HEAD
+                <th>¿Borrar?</th>
+            </thead>
+            <tbody>
+            {% for form in formset %}
+            <tr>
+                <td>{{ form.id.value }}</td>
+                {% for field in form %}
+                    <td>{{ field }}</td>
+                {% endfor %}               
+            </tr>
+            {% endfor %}
+            </thead class="bg-dark text-light">
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Total general: {{Total}}</th>
+          
+            </tbody>
+        </table>
+        <button class="btn btn-primary mb-3" type="submit">Guardar</button>
+        <a class="btn btn-outline-primary mb-3" href="{% url 'ventas' %}">Cancelar</a>
+
+        {% if ventas.id %}
+            <a class="btn btn-outline-primary mb-3" href="{% url 'ventasPDF' venta_pk=venta.id %}">Imprimir</a>
+        {% else %}
+            <button disabled>Imprimir</button>
+        {% endif %}        
+    </form>
+</div>
+{% endblock %}
+=======
                 <th>Total general: {{ total }}</th>
             
                 </tbody>
@@ -88,3 +120,4 @@
     </div>
     {% endblock %}
 </body>
+>>>>>>> 059f35930230ac4bbdb232f8bbd91693a6044f64

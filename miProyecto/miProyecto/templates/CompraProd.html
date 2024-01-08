@@ -76,10 +76,23 @@
                 </tbody>
             </table>
 
+<<<<<<< HEAD
+        <button class="btn btn-primary mb-3" type="submit">Guardar</button>
+        <a class="btn btn-outline-primary mb-3" href="{% url 'compra' %}">Cancelar</a>
+
+        {% if compra.id %}
+            <a class="btn btn-outline-primary mb-3" href="{% url 'comprasPDF' compra_pk=compra.id %}">Imprimir</a>
+        {% else %}
+            <button disabled>Imprimir</button>
+        {% endif %}
+    </form>
+</div>
+=======
             <button class="btn btn-primary mb-3" type="submit">Guardar</button>
             <a class="btn btn-outline-primary mb-3" href="/compra/ComprasLista">Cancelar</a>
         </form>
     </div>
+>>>>>>> 059f35930230ac4bbdb232f8bbd91693a6044f64
 
     {% endblock %}
 </body>
