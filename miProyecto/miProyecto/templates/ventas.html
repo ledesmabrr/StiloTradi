@@ -60,29 +60,31 @@
 <body>
     <div class="container">
         <h1>Ventas</h1>
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr> 
-                    <th>Vendedor</th> 
-                    <th>TipoVenta</th>
-                    <th>TipoPago</th> 
-                    <th>Total</th>
-                    <th>Fecha</th> 
-                </tr>
-            </thead> 
-            <tbody>
-                 {% for ventas in ventas %}
-        <tr style ="cursor: pointer;" onclick="window.location.href='/ventas/VentasModif/{{ ventas.id }}'">
-            
-            <td>{{ ventas.Vendedor}}</td>
-            <td>{{ ventas.TipoVenta}}</td>
-            <td>{{ ventas.TipoPago}}</td>
-            <td>{{ ventas.Total}}</td>
-            <td>{{ ventas.Fecha}}</td>
-        </tr>
-                {% endfor %}
-            </tbody> 
-        </table>
+        <div class=" table-responsive">
+            <table class="table rounded-table table-bordered">
+                <thead>
+                    <tr> 
+                        <th>Vendedor</th> 
+                        <th>TipoVenta</th>
+                        <th>TipoPago</th> 
+                        <th>Total</th>
+                        <th>Fecha</th> 
+                    </tr>
+                </thead> 
+                <tbody>
+                    {% for ventas in ventas %}
+            <tr style ="cursor: pointer;" onclick="window.location.href='/ventas/VentasModif/{{ ventas.id }}'">
+                
+                <td>{{ ventas.Vendedor}}</td>
+                <td>{{ ventas.TipoVenta}}</td>
+                <td>{{ ventas.TipoPago}}</td>
+                <td>{{ ventas.Total}}</td>
+                <td>{{ ventas.Fecha}}</td>
+            </tr>
+                    {% endfor %}
+                </tbody> 
+            </table>
+        </div>
     </div>
 
 

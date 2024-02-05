@@ -17,75 +17,40 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        @media only screen and (max-width: 780px) {
-            table {
-                border: 1px solid #ddd;
-            }
-
-            th, td {
-                border: none;
-                border-bottom: 1px solid #ddd;
-                display: block;
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            th {
-                text-align: left;
-                background-color: #f2f2f2;
-            }
-        }
-    </style>
+   
     <!-- Incluye los estilos de Bootstrap -->
     {% bootstrap_css %}
 </head>
 <body>
-    <div class="container"> 
-        <h1>Proveedores</h1>
-        <table class="table rounded table-striped table-hover">
-            <thead>
-                <tr>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Telefono</th>
-                        <th>Localidad</th>
-                        <th>Email</th>
-                        <th>Borrar</th>
-                    </tr>
-                </tr>
-            </thead>
-            <tbody>
-                {% for proveedor in proveedor %}
-                <tr style ="cursor: pointer;" onclick="window.location.href='/proveedor/ProveedorModif/{{proveedor.id}}'">
-                    <td>{{ proveedor.Nombre}}</td>
-                    <td>{{ proveedor.Telefono}}</a></td>
-                    <td>{{ proveedor.Localidad}}</td>
-                    <td>{{ proveedor.Email}}</a></td>
-                    <td><a class="btn custom-btn2" href="/proveedor/ProveedorBorrar/{{proveedor.id}}">Borrar</a></td> </td>
-                </tr>
-                {% endfor %}
-            </tbody> 
-        </table>
-    </div>
-
+    <div class="container">
+            <h1>Proveedores</h1>
+            <div class="table-responsive  table-bordered "> 
+                <table class=" table rounded-table ">
+                    <thead>
+                        <tr>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Telefono</th>
+                                <th>Localidad</th>
+                                <th>Email</th>
+                                <th>Borrar</th>
+                            </tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proveedor in proveedor %}
+                        <tr style ="cursor: pointer;" onclick="window.location.href='/proveedor/ProveedorModif/{{proveedor.id}}'">
+                            <td>{{ proveedor.Nombre}}</td>
+                            <td>{{ proveedor.Telefono}}</a></td>
+                            <td>{{ proveedor.Localidad}}</td>
+                            <td>{{ proveedor.Email}}</a></td>
+                            <td><a class="btn custom-btn2" href="/proveedor/ProveedorBorrar/{{proveedor.id}}">Borrar</a></td> </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody> 
+                </table>
+           </div>
+    </div>    
 
     <div class="pagination justify-content-center">
         {% if page_obj.has_previous %}

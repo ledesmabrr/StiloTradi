@@ -17,83 +17,50 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        @media only screen and (max-width: 780px) {
-            table {
-                border: 1px solid #ddd;
-            }
-
-            th, td {
-                border: none;
-                border-bottom: 1px solid #ddd;
-                display: block;
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            th {
-                text-align: left;
-                background-color: #f2f2f2;
-            }
-        }
-    </style>
+   
     
     <!-- Incluye los estilos de Bootstrap -->
     {% bootstrap_css %}
 </head>
 
 <body>
-    <div class="container"> 
-        <h1>Productos</h1>
-        <table class="tabla-redondeada">
-            <thead>
-                <tr>
-                    <tr>
-                        <th>TipoProducto</th> 
-                        <th>Descripcion</th>
-                        <th>Talle</th>
-                        <th>Color</th>
-                        <th>Marca</th>
-                        <th>PrecioCompra</th>
-                        <th>PrecioVenta</th>
-                        <th>Stock</th>
-                        <th>Borrar</th>
-                        
-                    </tr>
-                </tr>
-            </thead> 
-            <tbody> 
-                {% for producto in productos %}
-                <tr style ="cursor: pointer;" onclick="window.location.href='/producto/ProductoModif/{{producto.id}}'">
-                    <td>{{ producto.TipoProducto}}</a></td>
-                    <td>{{ producto.Descripcion}}</td>
-                    <td>{{ producto.Talle}}</td>
-                    <td>{{ producto.Color}}</td>
-                    <td>{{ producto.Marca}}</td>
-                    <td>${{ producto.PrecioCompra}}</td>
-                    <td>${{ producto.PrecioVenta}}</td>
-                    <td>{{ producto.Stock}}</td>
-                    <td><a class="btn custom-btn2" href="/producto/ProductoBorrar/{{producto.id}}">Borrar</a></td> </td>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="container">
+        
+            <h1>Productos</h1>
+            <div class="table-responsive  "> 
+                <table class="table rounded-table ">
+                    <thead>
+                        <tr>
+                            <tr>
+                                <th>TipoProducto</th> 
+                                <th>Descripcion</th>
+                                <th>Talle</th>
+                                <th>Color</th>
+                                <th>Marca</th>
+                                <th>PrecioCompra</th>
+                                <th>PrecioVenta</th>
+                                <th>Stock</th>
+                                <th>Borrar</th>
+                                
+                            </tr>
+                        </tr>
+                    </thead> 
+                    <tbody> 
+                        {% for producto in productos %}
+                        <tr style ="cursor: pointer;" onclick="window.location.href='/producto/ProductoModif/{{producto.id}}'">
+                            <td>{{ producto.TipoProducto}}</a></td>
+                            <td>{{ producto.Descripcion}}</td>
+                            <td>{{ producto.Talle}}</td>
+                            <td>{{ producto.Color}}</td>
+                            <td>{{ producto.Marca}}</td>
+                            <td>${{ producto.PrecioCompra}}</td>
+                            <td>${{ producto.PrecioVenta}}</td>
+                            <td>{{ producto.Stock}}</td>
+                            <td><a class="btn custom-btn2" href="/producto/ProductoBorrar/{{producto.id}}">Borrar</a></td> </td>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
     </div>
     
     <div class="pagination justify-content-center">
