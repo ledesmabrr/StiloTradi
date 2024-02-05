@@ -1,9 +1,9 @@
 .encabezado{
     height: 100px;
 }
+
 body{
-    margin: 0;
-    padding: 0;
+    background-color: rgb(29, 23, 15);
 }
 .custom-btn-logo{
     margin-left: 1200px;
@@ -18,10 +18,12 @@ body{
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 400px;
+    width: 500px;
     height: 400px;
-    margin-left: 350px;
+    margin-left: 400px;
+    margin-top: 20px;
     text-align: center;
+    align-items: center;
 }
 
 .form-control{
@@ -31,20 +33,6 @@ body{
     border: 1px solid #ccc;
     border-radius: 5px;
   }
-.boton-login {
-    background-color: black; /* Fondo negro */
-    color: white; /* Texto blanco */
-    border: none; /* Sin borde */
-    border-radius: 40px; /* Bordes redondeados */
-    padding: 5px 70px;
-    margin-top: 10px;  /* Ajusta la distancia superior */
-    cursor: pointer;
-    font-weight: bold; /* Texto en negrita */    
-}
-
-.boton-login:hover {
-    background-color: #333; /* Color de fondo oscuro al pasar el cursor */
-}
 
 .mi-contenedor{
     background-color: #f5f5f5;
@@ -142,15 +130,49 @@ input, select, textarea {
 }
 
 .navbar .navbar-expand-lg{
-    background-color: #000000;
+    background-color: #ffffff;
     margin: 0rem;
     color: #ffffff;
     margin-top: 50px;
 }
 
 .nav-item {
+    color: #070707;
+}
+
+.nav-item:hover{
     color: #000000;
 }
+
+.nav-item-login{
+    color: #ffffff;
+    border: none; /* Sin borde */
+}
+
+.btn-login{
+    color: #ffffff;
+    text-decoration: none; 
+    
+}
+
+
+.boton-login {
+    background-color: black; /* Fondo negro */
+    color: white; /* Texto blanco */
+    border: none; /* Sin borde */
+    border-radius: 40px; /* Bordes redondeados */
+    padding: 5px 70px;
+    margin-top: 20px;  /* Ajusta la distancia superior */
+    cursor: pointer;
+    font-weight: bold; /* Texto en negrita */    
+    display: inline-block;
+    text-decoration: none; 
+}
+
+.boton-login:hover {
+    background-color: #242222; /* Color de fondo oscuro al pasar el cursor */
+}
+
 
 header{
     background-color:#000000 ;
@@ -160,11 +182,9 @@ header{
 footer{
     background-color: #000000;
     color: #ffffff;
-    position:fixed;
+    position:absolute;
     bottom: 0;
-    position: fixed;
-    bottom: 0;
-    height: 30px; /* Establece la altura del pie de página a 100 píxeles */
+    height: 90px; /* Establece la altura del pie de página a 100 píxeles */
     width: 100%;   /* Establece el ancho del pie de página al 100% del contenedor padre */
    
 
@@ -277,3 +297,40 @@ footer{
     vertical-align: middle; /* Centra verticalmente el logotipo */
   }
   
+.imagenFondo{
+    width: 100%; /* Ajusta el tamaño del logotipo según sea necesario */
+    height: 100%;
+    object-fit: cover; 
+}
+
+.carousel-item img {
+
+    width: 100%;
+    height: 100%;
+    margin-top: 1%;
+}
+
+.container1{
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    top: 100px;
+    left: 50px;
+   border-radius: 5%;
+}
+
+header nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -40px;
+    margin-left: 81%;
+}
+
+
+
+.iconoI{
+    text-align: center;
+    
+    
+}

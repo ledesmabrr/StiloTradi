@@ -4,44 +4,7 @@
 {% load static %} 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        @media only screen and (max-width: 780px) {
-            table {
-                border: 1px solid #ddd;
-            }
-
-            th, td {
-                border: none;
-                border-bottom: 1px solid #ddd;
-                display: block;
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            th {
-                text-align: left;
-                background-color: #f2f2f2;
-            }
-        }
-    </style>
-    
+   
     <!-- Incluye los estilos de Bootstrap -->
     {% bootstrap_css %}
 </head>
@@ -76,7 +39,6 @@
                 </tbody>
             </table>
 
-<<<<<<< HEAD
         <button class="btn btn-primary mb-3" type="submit">Guardar</button>
         <a class="btn btn-outline-primary mb-3" href="{% url 'compra' %}">Cancelar</a>
 
@@ -87,12 +49,6 @@
         {% endif %}
     </form>
 </div>
-=======
-            <button class="btn btn-primary mb-3" type="submit">Guardar</button>
-            <a class="btn btn-outline-primary mb-3" href="/compra/ComprasLista">Cancelar</a>
-        </form>
-    </div>
->>>>>>> 059f35930230ac4bbdb232f8bbd91693a6044f64
 
     {% endblock %}
 </body>

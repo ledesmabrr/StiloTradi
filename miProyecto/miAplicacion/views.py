@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from msilib import Table
 from django.shortcuts import render, reverse
 from django.urls import reverse_lazy
@@ -18,23 +17,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph,Table, TableStyle
-=======
-import queue
-from telnetlib import LOGOUT
-from django.contrib.auth.mixins import PermissionRequiredMixin 
-from django.shortcuts import redirect, render, reverse
-from django.urls import reverse_lazy
-from django.forms import formset_factory
-from django.views.generic import CreateView, UpdateView, DeleteView, ListView,View
-from django.http import HttpResponse,HttpResponseRedirect
-from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas
-from django.db.models import Q
+from django.contrib.auth.views import LoginView, LogoutView 
 from django.db.models import Sum
-from .forms import VendedoresForm, ClientesForm, ProductosForm, ProveedorForm,VentasForm,CompraForm,VentaProdForm 
-from django.contrib.auth.views import LoginView
-
-#from .mixins import PermissionRequiredMixin
->>>>>>> 059f35930230ac4bbdb232f8bbd91693a6044f64
 
 # Create your views here.
 def main(request):
@@ -53,6 +37,8 @@ def main(request):
                'ventas':ventas}
     
     return render(request, 'main.html', context)
+
+
 
 def tabla_cliente(request):
     cliente = Cliente.objects.all()
@@ -263,10 +249,10 @@ class VentasModif(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        Ventas = self.object
-        TotalGeneral = Ventas.ventaprod_set.aggregate(total_sum= Sum("Total"))["total_sum"] or 0
+        TotalVentas = self.object
+        total = Ventas.ventaprod_set.aggregate(total_sum= Sum("Total"))["total_sum"] or 0
         #TotalGeneral = Ventas.ventaprod_set.aggregate(sum("total"))["total__sum"] or 0
-        context["TotalGeneral"] = TotalGeneral
+        context["TotalGeneral"] = total
 
         if self.request.POST:
             context['formset'] = VentasForm.VentaProdFormset(self.request.POST, instance=self.object)
@@ -378,7 +364,6 @@ class CompraModif(UpdateView):
             return super().form_valid(form)
         else:
             return self.render_to_response(self.get_context_data(form=form))
-<<<<<<< HEAD
 
 
 def ventasPDF(request, venta_pk):
@@ -528,21 +513,6 @@ def comprasPDF(request, compra_pk):
 
     response = FileResponse(buf, as_attachment=True, filename=f'compra_{compra_pk}.pdf')
     return response
-=======
-        
-def Logout(request):
-    LOGOUT(request)
-    return redirect('/index')
 
-
-class PermissionRequiredMixin(View):
-    permission_required = None
-    login_url = '/login'
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm(self.permission_required):
-            return HttpResponseRedirect(self.login_url)
-        return super().dispatch(request, *args, **kwargs)
-    
-
->>>>>>> 059f35930230ac4bbdb232f8bbd91693a6044f64
+def index(request):
+    return render(request, 'index.html')

@@ -1,11 +1,16 @@
 from django.urls import path
 from. import views
-
+from django.views.generic import TemplateView
 
 urlpatterns = [
+
+               path('', views.index, name='index'),
                path('', views.main, name='main'),
                path('login/', views.LoginView.as_view(template_name='login.html'), name='login'),
-               path('logout/', views.Logout, name='logout'),
+               path('logout/', views.LogoutView.as_view, name='logout'),
+               path('base/', TemplateView.as_view(template_name='base.html'), name='base'),
+               path('index/', TemplateView.as_view(template_name='index.html'), name='index'),
+                path('cerrar/', TemplateView.as_view(template_name='cerrar.html'), name='cerrar'),
                
                path('producto/', views.tabla_producto, name='producto'),
                path('proveedor/', views.tabla_proveedor, name='proveedor'),
@@ -37,23 +42,10 @@ urlpatterns = [
                path('ventas/VentasLista/', views.VentasLista.as_view(), name='ventasLista'), 
                path('ventas/VentasNuevo/', views.VentasNuevo.as_view(), name='ventasNuevo'),
                path('ventas/VentasModif/<int:pk>/', views.VentasModif.as_view(), name='VentasModif'),
-               path('ventasPDF/<int:compra_pk>', views.ventasPDF, name='ventasPDF'),
+               path('ventasPDF/<int:ventas_pk>', views.ventasPDF, name='ventasPDF'),
 
                path('compra/ComprasLista/', views.ComprasLista.as_view(), name='comprasLista'), 
-<<<<<<< HEAD
                path('compra/CompraNuevo/', views.CompraNuevo.as_view(), name='CompraNuevo'),
                path('compra/CompraModif/<int:pk>/', views.CompraModif.as_view(), name='CompraModif'),
-               path('comprasPDF/<int:compra_pk>/', views.comprasPDF, name='comprasPDF')
-               
-
-=======
-               path('compra/CompraNuevo/', views.CompraNuevo.as_view(), name='ventasNuevo'),
-               path('compra/CompraModif/<int:pk>/', views.CompraModif.as_view(), name='VentasModif'),
-
-               path('login/main', views.main, name='main'),
-
-              
-
-               
->>>>>>> 059f35930230ac4bbdb232f8bbd91693a6044f64
-]   
+               path('comprasPDF/<int:compra_pk>/', views.comprasPDF, name='comprasPDF')               
+            ]   

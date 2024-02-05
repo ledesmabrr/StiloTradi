@@ -4,48 +4,12 @@
 {% load static %} 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        @media only screen and (max-width: 780px) {
-            table {
-                border: 1px solid #ddd;
-            }
-
-            th, td {
-                border: none;
-                border-bottom: 1px solid #ddd;
-                display: block;
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            th {
-                text-align: left;
-                background-color: #f2f2f2;
-            }
-        }
-    </style>
+   
 </head>
 <body>
 
     <div class="container">
-        <h3 class="display-4 my-3">Ventas #{{ ventas.id }}</h3>
+        <h3 class="display-4 my-3">Ventas </h3>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
@@ -78,46 +42,18 @@
                 </thead class="bg-dark text-light">
                 <th></th>
                 <th></th>
-<<<<<<< HEAD
-                <th>¿Borrar?</th>
+                <th></th><th></th><th>TOTAL: </th>
             </thead>
-            <tbody>
-            {% for form in formset %}
-            <tr>
-                <td>{{ form.id.value }}</td>
-                {% for field in form %}
-                    <td>{{ field }}</td>
-                {% endfor %}               
-            </tr>
-            {% endfor %}
-            </thead class="bg-dark text-light">
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>Total general: {{Total}}</th>
-          
-            </tbody>
+            
         </table>
         <button class="btn btn-primary mb-3" type="submit">Guardar</button>
         <a class="btn btn-outline-primary mb-3" href="{% url 'ventas' %}">Cancelar</a>
 
         {% if ventas.id %}
-            <a class="btn btn-outline-primary mb-3" href="{% url 'ventasPDF' venta_pk=venta.id %}">Imprimir</a>
+            <a class="btn btn-outline-primary mb-3" href="{% url 'ventasPDF' ventas_pk=ventas.id %}">Imprimir</a>
         {% else %}
             <button disabled>Imprimir</button>
         {% endif %}        
     </form>
 </div>
 {% endblock %}
-=======
-                <th>Total general: {{ total }}</th>
-            
-                </tbody>
-            </table>
-            <button class="btn btn-primary mb-3"  type="submit">Guardar</button>
-            <a class="btn btn-outline-primary mb-3" href="/ventas/VentasLista/">Cancelar</a>
-        </form>
-    </div>
-    {% endblock %}
-</body>
->>>>>>> 059f35930230ac4bbdb232f8bbd91693a6044f64
