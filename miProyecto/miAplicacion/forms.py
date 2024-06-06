@@ -57,6 +57,7 @@ class VentaProdForm(forms.ModelForm):
         widgets = {
             'Producto': forms.Select(attrs={'class': 'form-select'}),  
             'Ventas': forms.Select(attrs={'class': 'form-select'}), 
+            'Cantidad': forms.NumberInput(attrs={'class': 'form-select'}),
         }
 
 class VentasForm(forms.ModelForm):

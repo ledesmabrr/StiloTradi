@@ -7,13 +7,11 @@
     <form method="GET" action="{% url 'comprasLista' %}">
         <div class="input-group">
             <input type="date" class="form-control inputApagado" name="q" value="{{ query }}" >
-            <button class="btn btn-primary text-light" type="submit">Buscar</button>
+            <button class="btn-buscar btn-primary  type="submit> <i class="fas fa-search"></i> Buscar</button>
         </div>
     </form>
 </div>
-<div class="d-flex justify-content-end  align-items-end">
-    <a class="btn btn-primary custom-btn" href="/compra/CompraNuevo/">Nuevo</a></td>
-</div>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
@@ -21,11 +19,20 @@
     {% bootstrap_css %}
 </head>
 <body>
+    <style>
+        body {
+            background-color: rgb(183, 193, 196);
+        }
+    </style>
+ 
     <div class="container">
+        <div class="d-flex" >
+            <a class="btn-agregar"   href="/compra/CompraNuevo/"> <i class="fas fa-plus"></i> Agregar</a></td>
+        </div>
         <h1>Compra</h1>
         <div class=" table-responsive">
             <table class="table rounded-table table-bordered">
-                <thead>
+                <thead> 
                     <tr>
                         <tr>
                             <th>Proveedor</th>
@@ -48,23 +55,23 @@
 
 
 
-    <div class="pagination justify-content-center">
+    <div class="pagination justify-content-center mt-3">
         {% if page_obj.has_previous %}
-            <a class="btn btn-outline-primary mb-3" href="?page=1">Primera</a>
-            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.previous_page_number }}">
+            <a class="btn btn-outline-light text-dark mb-3" href="?page=1">Primera</a>
+            <a class="btn btn-outline-light text-dark mb-3" href="?page={{ page_obj.previous_page_number }}">
                 Anterior
             </a>
         {% endif %}
     
-        <span class="current-page btn btn-outline-light disabled text-primary mb-3">
+        <span class="current-page btn btn-outline-light disabled text-dark mb-3">
             {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
         </span>
     
         {% if page_obj.has_next %}
-            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.next_page_number }}">
+            <a class="btn btn-outline-light text-dark mb-3" href="?page={{ page_obj.next_page_number }}">
                 Siguiente
             </a>
-            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.paginator.num_pages }}">
+            <a class="btn btn-outline-light text-dark mb-3" href="?page={{ page_obj.paginator.num_pages }}">
                 Última
             </a>
         {% endif %}

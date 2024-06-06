@@ -249,8 +249,8 @@ class VentasModif(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        TotalVentas = self.object
-        total = Ventas.ventaprod_set.aggregate(total_sum= Sum("Total"))["total_sum"] or 0
+        Ventas = self.object
+        total = Ventas.VentaProd_set.aggregate(total_sum= Sum("Total"))["total_sum"] or 0
         #TotalGeneral = Ventas.ventaprod_set.aggregate(sum("total"))["total__sum"] or 0
         context["TotalGeneral"] = total
 
@@ -516,3 +516,5 @@ def comprasPDF(request, compra_pk):
 
 def index(request):
     return render(request, 'index.html')
+
+

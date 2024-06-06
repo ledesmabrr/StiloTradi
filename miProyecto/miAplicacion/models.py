@@ -45,7 +45,7 @@ class Cliente(models.Model):
     Telefono = models.IntegerField ()
     Direccion = models.CharField (max_length=50)
     Saldo = models.FloatField () 
-
+ 
     def __str__(self) -> str:
         return self.Nombre
 
@@ -58,7 +58,7 @@ class Ventas(models.Model):
 
 class VentaProd(models.Model): 
     Producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    Ventas = models.ForeignKey (Ventas, on_delete=models.CASCADE, related_name='ventaprod_set')  
+    Ventas = models.ForeignKey (Ventas, on_delete=models.CASCADE, related_name='VentaProd_set')  
     Cantidad = models.IntegerField (default=0)
     Total = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)
 

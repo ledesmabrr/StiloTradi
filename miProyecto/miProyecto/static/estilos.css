@@ -66,7 +66,7 @@ input, select, textarea {
 /* Estilos generales para el botón Nuevo */
 .btn.custom-btn {
     background-color: rgb(241, 241, 241);
-    color:rgb(8, 106, 218);
+    color:rgb(44, 255, 2);
     margin-right: 180px;
     margin-top: 10px;
     text-align: center;
@@ -76,8 +76,42 @@ input, select, textarea {
 
 /* Estilo cuando el cursor está sobre el botón Nuevo */
 .btn.custom-btn:hover {
-    background-color: rgb(8, 106, 218);
+    background-color: rgb(8, 218, 19);
     color:#ffffff;
+    
+}
+
+.btn-agregar {
+    background-color: #13b819; /* Color verde */
+    border: none;
+    color: white;
+    padding: 7px 17px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 80px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 81%;
+    position: absolute;
+   
+    
+  }
+  
+  .btn-agregar:hover {
+    background-color: #319435; /* Cambia de tono al pasar el cursor */
+    color: white;
+    
+  }
+
+
+
+.btn-buscar  {
+    border-radius: 5px;
+    padding: 5px 15px;
+    height: 38px;
+    margin-top: 5px;
     
 }
 
@@ -140,10 +174,13 @@ input, select, textarea {
 }
 
 .btn-login{
-    color: #ffffff;
-    text-decoration: none; 
+    display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      color: white;
     
 }
+
 
 
 .boton-login {
@@ -169,14 +206,17 @@ header{
     text-align: center;
 }
 
+.content-wrap {
+    position: relative;
+    padding-bottom: 50px; /* Asegura espacio para el contenido por encima del footer fijo */
+}
 footer{
     background-color: #000000;
     color: #ffffff;
-    position:absolute;
+    position: fixed;
     bottom: 0;
-    height: 90px; /* Establece la altura del pie de página a 100 píxeles */
+    height: 70px; /* Establece la altura del pie de página a 100 píxeles */
     width: 100%;   /* Establece el ancho del pie de página al 100% del contenedor padre */
-   
 
 }
 
@@ -195,24 +235,27 @@ footer{
 
 .table-responsive{
     overflow: hidden;
+    border-collapse: separate; /* Opción predeterminada, mantiene los bordes separados */
+    border: 1px solid #ffffff;
+    border-radius: 15px; 
+   
 }
 
 .rounded-table  {
     border-radius: 15px; /* Ajusta este valor según la curvatura que desees */
     overflow: hidden; /* Opcional, dependiendo de tu estructura */
-
-    
+   
 }
 
 
 /* Estilos para los encabezados de la tabla */
 
 .table thead th {
-    border: 1px solid #cfc8c8; 
+    border: 1px solid #000000; 
     padding: 8px;
     text-align: center;
     background-color: #000000;
-    color: #ffffff;
+    color: #fff9f9;
     vertical-align: bottom;
     
         
@@ -220,7 +263,7 @@ footer{
 
 /* Estilos para las celdas de datos */
 .table tbody  td {
-    border: 1px solid #cfc8c8;
+    border: 1px solid #ffefef;
     padding: 8px;
 }
 
@@ -247,6 +290,7 @@ footer{
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #dee2e6;
+  border-radius: 15px;
 }
 
 .instagram-logo {
@@ -298,4 +342,14 @@ header nav{
     text-align: center;
     
     
+}
+
+.pagination .justify-content-center{
+    border: #f5f5f5;
+    margin: 20px;
+}
+
+.container{
+    position: relative;
+    margin-bottom: 25px;
 }
