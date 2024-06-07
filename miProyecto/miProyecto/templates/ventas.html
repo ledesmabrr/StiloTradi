@@ -1,0 +1,118 @@
+{% include 'base.html' %} 
+{% block content %} 
+{% load bootstrap5 %}
+{% load static %} 
+<!DOCTYPE html>
+<div class="d-flex justify-content-end align-items-end mb-3">
+    <form method="GET" action="{% url 'ventasLista' %}">
+        <div class="input-group">
+            <input type="date" class="form-control inputApagado" name="q" value="{{ query }}">
+            <button class="btn btn-primary text-light" type="submit">Buscar</button>
+        </div>
+    </form>
+</div>
+<div class="d-flex justify-content-end  align-items-end">
+    <a class="btn btn-primary custom-btn" href="/ventas/VentasNuevo/">Nuevo</a></td>
+</div>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        @media only screen and (max-width: 780px) {
+            table {
+                border: 1px solid #ddd;
+            }
+
+            th, td {
+                border: none;
+                border-bottom: 1px solid #ddd;
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            th {
+                text-align: left;
+                background-color: #f2f2f2;
+            }
+        }
+    </style>
+
+    <!-- Incluye los estilos de Bootstrap -->
+    {% bootstrap_css %}
+</head>
+<body>
+    <div class="container">
+        <h1>Ventas</h1>
+        <div class=" table-responsive">
+            <table class="table rounded-table table-bordered">
+                <thead>
+                    <tr> 
+                        <th>Vendedor</th> 
+                        <th>TipoVenta</th>
+                        <th>TipoPago</th> 
+                        <th>Total</th>
+                        <th>Fecha</th> 
+                    </tr>
+                </thead> 
+                <tbody>
+                    {% for ventas in ventas %}
+            <tr style ="cursor: pointer;" onclick="window.location.href='/ventas/VentasModif/{{ ventas.id }}'">
+                
+                <td>{{ ventas.Vendedor}}</td>
+                <td>{{ ventas.TipoVenta}}</td>
+                <td>{{ ventas.TipoPago}}</td>
+                <td>{{ ventas.Total}}</td>
+                <td>{{ ventas.Fecha}}</td>
+            </tr>
+                    {% endfor %}
+                </tbody> 
+            </table>
+        </div>
+    </div>
+
+
+    <div class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-primary mb-3" href="?page=1">Primera</a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.previous_page_number }}">
+                Anterior
+            </a>
+        {% endif %}
+    
+        <span class="current-page btn btn-outline-light disabled text-primary mb-3">
+            {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+    
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.next_page_number }}">
+                Siguiente
+            </a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.paginator.num_pages }}">
+                Última
+            </a>
+        {% endif %}
+    </div>
+
+
+    <!-- Incluye los scripts de Bootstrap al final del cuerpo -->
+    {% bootstrap_javascript %}
+</body>
+</html>
+{% endblock %}

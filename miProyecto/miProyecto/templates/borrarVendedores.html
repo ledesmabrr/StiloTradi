@@ -1,0 +1,14 @@
+{% include 'navbar.html' %} 
+{% load static %} 
+{% block content %} 
+
+<div class="detalle">
+    <h1>Borrar vendedores</h1>
+
+    <p>¿Esta seguro de borrar el Vendedor <b>{{vendedores.Nombre}}</b>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn custom-btn-aceptar">Aceptar</button>
+        <a type="submit" class="btn custom-btn-cancelar" href="/vendedores/VendedoresLista/">Cancelar</a>
+</div>
+{% endblock %} 

@@ -1,0 +1,177 @@
+{% include 'base.html' %} 
+{% block content %} 
+{% load bootstrap5 %}
+{% load static %} 
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <!-- Incluye los estilos de Bootstrap -->
+    {% bootstrap_css %}
+</head>
+<body>
+    <div class="container">
+        <h3 class="display-4 my-3">Compra #{{ Compra.id }}</h3>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {{ formset.management_form }}
+            <h6 class="display-6 my-3">Producto</h6>
+
+            <table class="table table-striped table-hover">
+                <thead class="bg-dark text-light">
+                    <th>Id</th>
+                    <th></th>
+                    <th>TipoProducto</th>
+                    <th>Cantidad</th>
+                    <th>PrecioCompra</th>
+                    <th>SubTotal</th>
+                    <th></th>
+                    <th>¿Borrar?</th>
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                    <tr id="row_{{ forloop.counter }}"></tr>
+                        <td>{{ form.id.value }}</td>
+                        {% for field in form %}
+                        {% if not field.name == 'Total' %}
+                        <td>{{ field }}</td>
+                        {% endif %}
+                        {% endfor %}
+                        <!-- Campo para el SubTotal -->
+                        <input type="hidden" name="{{ form.prefix }}-SubTotal" id="{{ form.prefix }}-SubTotal">
+                        <!-- <input type="hidden" name="{{ form.prefix }}-Total" id="{{ form.prefix }}-Total"> -->
+                    </tr>
+                </tbody>
+                {% endfor %}
+                
+                <tfoot class="bg-dark text-light">
+                    <tr>
+                        <th colspan="4"></th>
+                        <th>TOTAL:</th>
+                        <th><input type="text" id="tabla_Total" class="form-control" readonly></th>
+                    </tr>
+                </tfoot>
+            </table>
+
+        <button class="btn btn-primary mb-3" type="submit">Guardar</button>
+        <a class="btn btn-outline-primary mb-3" href="/compra/ComprasLista">Cancelar</a>
+
+        {% if compra.id %}
+            <a class="btn btn-outline-primary mb-3" href="{% url 'comprasPDF' compra_pk=compra.id %}">Imprimir</a>
+        {% else %}
+            <button disabled>Imprimir</button>
+        {% endif %}
+    </form>
+</div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.getElementById("guardar_compra").addEventListener("click", function() {
+        var form = document.getElementById("compra_form");
+        var table = document.getElementById("compra_table");
+        var cantidadVendida = [];
+        var rows = table.getElementsByTagName("tr");
+        for (var i = 1; i < rows.length; i++) {
+            var row = rows[i];
+            var cantidadInput = row.querySelector("input[name$='cantidad']");
+            cantidadVendida.push(cantidadInput.value);
+        }
+        // Añade las cantidades vendidas como un campo en el formulario antes de enviarlo
+        var input = document.createElement("input");
+        input.setAttribute("type", "hidden");
+        input.setAttribute("name", "cantidades_vendidas");
+        input.setAttribute("value", JSON.stringify(cantidadVendida));
+        form.appendChild(input);
+        // Envía el formulario
+        form.submit();
+    });
+
+    $(document).ready(function() {
+        // Agrega la clase 'form-select' a todos los selectores de producto
+        $('select[name$="Producto"]').addClass('form-select');
+
+        // Agrega un controlador de eventos onChange a los campos de producto
+        $('select[name$="Producto"]').change(function() {
+            updatePriceAndTotal(this);
+        });
+
+        // Agrega un controlador de eventos change a los campos de cantidad
+        $('input[name$="Cantidad"]').change(function() {
+            updateTotal(this);
+        });
+        
+    });
+
+    function updatePriceAndTotal(selectElement) {
+        console.log('Updating price and subtotal...');
+        var productId = selectElement.value;
+        var url = `/get-product-price-compra/${productId}/`; // URL para obtener el precio del producto
+        console.log('URL:', url);
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response data:', data);
+                var precioCompraInput = selectElement.closest('tr').querySelector('[name$="PrecioCompra"]');
+                if (precioCompraInput) {
+                    precioCompraInput.value = data.precioCompra;
+                    console.log('PrecioCompra input:', precioCompraInput);
+
+                    // Actualizar el subtotal del formulario actual
+                    // updateTotal(selectElement.closest('tr').querySelector('[name$="Cantidad"]'));
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    function updateTotal(inputElement) {
+        var $row = $(inputElement).closest('tr');
+        var cantidad = parseFloat($row.find('input[name$="Cantidad"]').val());
+        var precioCompra = parseFloat($row.find('input[name$="PrecioCompra"]').val());
+        console.log('Cantidad:', cantidad);
+        console.log('Precio Compra:', precioCompra);
+        if (!isNaN(cantidad) && !isNaN(precioCompra)) {
+            var subTotal = cantidad * precioCompra;
+            console.log('Subtotal:', subTotal);
+            $row.find('input[name$="SubTotal"]').val(subTotal.toFixed(2));
+            $row.find('input[name$="SubTotal"]').attr('value', subTotal.toFixed(2));
+        }
+        // Actualizar el total debajo de la tabla
+        updateTotalSum();
+    }
+
+
+    function updateTotalSum() {
+    var totalSum = 0;
+    var lastSubtotal = 0;
+    var context = window.location.href;
+
+    if (context.includes('CompraNuevo')) {
+        $('input[name$="SubTotal"]').each(function() {
+            var subTotal = parseFloat($(this).val());
+            console.log('SubTotal:', subTotal);
+            if (!isNaN(subTotal)) {
+                totalSum += subTotal / 2;
+            }
+        });
+    } else if (context.includes('CompraModif')) {
+        $('input[name$="SubTotal"]').each(function() {
+            var subTotal = parseFloat($(this).val());
+            console.log('SubTotal:', subTotal);
+            if (!isNaN(subTotal)) {
+                totalSum += subTotal;
+                lastSubtotal = subTotal;
+            }
+        });
+    }
+    // Restar lastSubtotal de totalSum solo si estamos en VentasModif
+    if (context.includes('CompraModif')) {
+        totalSum -= lastSubtotal;
+    }
+    console.log('Last Subtotal:', lastSubtotal);
+    console.log('Total Sum:', totalSum);
+    $('#tabla_Total').val(totalSum.toFixed(2));
+}
+</script>
+{% endblock %}

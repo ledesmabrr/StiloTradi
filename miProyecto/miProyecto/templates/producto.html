@@ -1,0 +1,99 @@
+{% include 'base.html' %} 
+{% block content %} 
+{% load bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<div class="d-flex justify-content-end align-items-end mb-3">
+    <form method="GET" action="{% url 'productoLista' %}">
+        <div class="input-group">
+            <input type="text" class="form-control inputApagado" name="q" value="{{ query }}" placeholder="Buscar producto...">
+            <button class="btn btn-primary text-light" type="submit">Buscar</button>
+        </div>
+    </form> 
+</div>
+    <div class="d-flex justify-content-end  align-items-end">
+        <a class="btn btn-primary custom-btn" href="{% url 'productoNuevo' %}">Nuevo</a></td>
+    </div>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    
+    <!-- Incluye los estilos de Bootstrap -->
+    {% bootstrap_css %}
+</head>
+
+<body>
+    <div class="container">
+        
+            <h1>Productos</h1>
+            <div class="table-responsive  "> 
+                <table class="table rounded-table ">
+                    <thead>
+                        <tr>
+                            <tr>
+                                <th>TipoProducto</th> 
+                                <th>Descripcion</th>
+                                <th>Talle</th>
+                                <th>Color</th>
+                                <th>Marca</th>
+                                <th>PrecioCompra</th>
+                                <th>PrecioVenta</th>
+                                <th>Stock</th>
+                                <th>Borrar</th>
+                                
+                            </tr>
+                        </tr>
+                    </thead> 
+                    <tbody> 
+                        {% for producto in productos %}
+                        <tr style ="cursor: pointer;" onclick="window.location.href='/producto/ProductoModif/{{producto.id}}'">
+                            <td>{{ producto.TipoProducto}}</a></td>
+                            <td>{{ producto.Descripcion}}</td>
+                            <td>{{ producto.Talle}}</td>
+                            <td>{{ producto.Color}}</td>
+                            <td>{{ producto.Marca}}</td>
+                            <td>${{ producto.PrecioCompra}}</td>
+                            <td>${{ producto.PrecioVenta}}</td>
+                            <td>{{ producto.Stock}}</td>
+                            <td><a class="btn custom-btn2" href="/producto/ProductoBorrar/{{producto.id}}">Borrar</a></td> </td>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    
+    <div class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-primary mb-3" href="?page=1">Primera</a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.previous_page_number }}">
+                Anterior
+            </a>
+        {% endif %}
+    
+        <span class="current-page btn btn-outline-light disabled text-primary mb-3">
+            {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+    
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.next_page_number }}">
+                Siguiente
+            </a>
+            <a class="btn btn-outline-primary mb-3" href="?page={{ page_obj.paginator.num_pages }}">
+                Última
+            </a>
+        {% endif %}
+    </div>
+
+
+    <!-- {% if perms.aplicacion.change_Producto %}
+    <td><a href="/producto/ProductoModif/{{TipoProducto.id}}">{{ p.TipoProducto }}</a></td>
+    {% else %}
+    <td>{{ p.TipoProducto }}</td>
+    {% endif %}  --> 
+
+    <!-- Incluye los scripts de Bootstrap al final del cuerpo -->
+    {% bootstrap_javascript %}
+</body>
+</html>
+{% endblock %}
