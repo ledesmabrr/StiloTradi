@@ -10,7 +10,11 @@
 
     <div class="container">
         <h3 class="display-4 my-3">Ventas </h3>
+<<<<<<< HEAD
         <form method="post" id="ventas_form" enctype="multipart/form-data">
+=======
+        <form method="post" enctype="multipart/form-data">
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
             {% csrf_token %}
             {{ form.as_p }}
             {{ formset.management_form }}
@@ -20,6 +24,7 @@
             <table class="table table-striped table-hover"> 
                 <thead class="bg-dark text-light">
                     <th>Id</th>
+<<<<<<< HEAD
                     <th></th>
                     <th>Tipo Producto</th>
                     <th>Cantidad</th>
@@ -56,6 +61,36 @@
         <!-- <button class="btn btn-primary mb-3" type="submit">Guardar</button> -->
         <button id="guardar_venta" class="btn btn-primary mb-3" type="submit">Guardar</button>
         <a class="btn btn-outline-primary mb-3" href="/ventas/VentasLista">Cancelar</a>
+=======
+                    <th>TipoProducto</th>
+                    <th></th>
+                    <th>Cantidad</th>
+                    <th>PrecioVenta</th>
+                    <th></th>
+                    <th>¿Borrar?</th>
+                    <th></th>
+                    
+                </thead>
+                <tbody>
+                {% for form in formset %}
+                <tr>
+                    <td>{{ form.id.value }}</td>
+                    {% for field in form %}
+                        <td>{{ field }}</td>
+                    {% endfor %}              
+                </tr>
+                {% endfor %}
+                
+                </thead class="bg-dark text-light">
+                <th></th>
+                <th></th>
+                <th></th><th></th><th>TOTAL: </th>
+            </thead>
+            
+        </table>
+        <button class="btn btn-primary mb-3" type="submit">Guardar</button>
+        <a class="btn btn-outline-primary mb-3" href="{% url 'ventas' %}">Cancelar</a>
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 
         {% if ventas.id %}
             <a class="btn btn-outline-primary mb-3" href="{% url 'ventasPDF' ventas_pk=ventas.id %}">Imprimir</a>
@@ -64,6 +99,7 @@
         {% endif %}        
     </form>
 </div>
+<<<<<<< HEAD
 </body>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -223,4 +259,6 @@
         });
     }
 </script>
+=======
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 {% endblock %}

@@ -24,11 +24,15 @@
                     <th>TipoProducto</th>
                     <th>Cantidad</th>
                     <th>PrecioCompra</th>
+<<<<<<< HEAD
                     <th>SubTotal</th>
+=======
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
                     <th></th>
                     <th>¿Borrar?</th>
                 </thead>
                 <tbody>
+<<<<<<< HEAD
                     {% for form in formset %}
                     <tr id="row_{{ forloop.counter }}"></tr>
                         <td>{{ form.id.value }}</td>
@@ -55,6 +59,21 @@
 
         <button class="btn btn-primary mb-3" type="submit">Guardar</button>
         <a class="btn btn-outline-primary mb-3" href="/compra/ComprasLista">Cancelar</a>
+=======
+                {% for form in formset %}
+                <tr>
+                    <td>{{ form.id.value }}</td>
+                    {% for field in form %}
+                        <td>{{ field }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        <button class="btn btn-primary mb-3" type="submit">Guardar</button>
+        <a class="btn btn-outline-primary mb-3" href="{% url 'compra' %}">Cancelar</a>
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 
         {% if compra.id %}
             <a class="btn btn-outline-primary mb-3" href="{% url 'comprasPDF' compra_pk=compra.id %}">Imprimir</a>
@@ -63,6 +82,7 @@
         {% endif %}
     </form>
 </div>
+<<<<<<< HEAD
 </body>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -175,3 +195,8 @@
 }
 </script>
 {% endblock %}
+=======
+
+    {% endblock %}
+</body>
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca

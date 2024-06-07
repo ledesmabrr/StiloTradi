@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from ast import Yield
 from calendar import c
 from cgitb import text
@@ -14,6 +15,17 @@ from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 from django.http import HttpResponse,HttpResponseRedirect, JsonResponse
 from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas, CompraProd, VentaProd
 from .forms import CompraProdForm, VendedoresForm, ClientesForm, ProductosForm, ProveedorForm,VentasForm,CompraForm,VentaProdForm 
+=======
+from msilib import Table
+from django.shortcuts import render, reverse
+from django.urls import reverse_lazy
+from django.forms import formset_factory
+from django.views import View
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
+from django.http import HttpResponse,HttpResponseRedirect
+from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas, CompraProd, VentaProd
+from .forms import VendedoresForm, ClientesForm, ProductosForm, ProveedorForm,VentasForm,CompraForm,VentaProdForm 
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 from django.http import FileResponse
 import io
 from reportlab.pdfgen import canvas
@@ -24,12 +36,17 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph,Table, TableStyle
+<<<<<<< HEAD
 from reportlab.platypus import Paragraph
 from django.contrib.auth.views import LoginView, LogoutView 
 from django.db.models import Sum
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
+=======
+from django.contrib.auth.views import LoginView, LogoutView 
+from django.db.models import Sum
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 
 # Create your views here.
 def main(request):
@@ -220,6 +237,7 @@ class ProductoLista(ListView):
             productos = Producto.objects.filter(TipoProducto__icontains = query)
         return productos
        
+<<<<<<< HEAD
 
 
 
@@ -243,6 +261,9 @@ def get_precio_compra_producto(request, producto_id):
 
 
 
+=======
+  
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 class VentasNuevo(CreateView):
     model = Ventas
     form_class = VentasForm   
@@ -251,6 +272,7 @@ class VentasNuevo(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+<<<<<<< HEAD
         formset = self.get_VentaProdFormset(data=self.request.POST if self.request.method == 'POST' else None, instance=self.object)
         context['formset'] = formset
 
@@ -318,6 +340,26 @@ class VentasNuevo(CreateView):
 
 
 
+=======
+
+        if self.request.POST:
+            context['formset'] = VentasForm.VentaProdFormset(self.request.POST)
+        else:
+            context['formset'] = VentasForm.VentaProdFormset()
+        return context
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid() and form.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+        
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 
 class VentasModif(UpdateView):
     model = Ventas
@@ -330,6 +372,7 @@ class VentasModif(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+<<<<<<< HEAD
         formset = self.get_VentaProdFormset(data=self.request.POST if self.request.method == 'POST' else None, instance=self.object)
         context['formset'] = formset
         context['form'] = self.get_form()
@@ -341,11 +384,24 @@ class VentasModif(UpdateView):
             precio_venta = producto.PrecioVenta
             context['precio_venta'] = precio_venta
 
+=======
+
+        TotalVentas = self.object
+        total = Ventas.ventaprod_set.aggregate(total_sum= Sum("Total"))["total_sum"] or 0
+        #TotalGeneral = Ventas.ventaprod_set.aggregate(sum("total"))["total__sum"] or 0
+        context["TotalGeneral"] = total
+
+        if self.request.POST:
+            context['formset'] = VentasForm.VentaProdFormset(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = VentasForm.VentaProdFormset(instance=self.object)
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+<<<<<<< HEAD
 
         if formset.is_valid() and form.is_valid():
             # Guardar el formulario principal
@@ -401,6 +457,16 @@ class VentasModif(UpdateView):
 class VentasLista(ListView):
     model = Ventas
     ordering = ['-id']  # Ordena por id de manera descendente
+=======
+        if formset.is_valid() and form.is_valid():
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+class VentasLista(ListView):
+    model = Ventas
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
     template_name = 'ventas.html'
     context_object_name = 'ventas'
     paginate_by = 3
@@ -424,7 +490,10 @@ class VentasLista(ListView):
     
 class ComprasLista(ListView):
     model = Compra
+<<<<<<< HEAD
     ordering = ['-id']  # Ordena por id de manera descendente
+=======
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
     template_name = 'compra.html'
     context_object_name = 'compra'
     paginate_by = 3
@@ -455,6 +524,7 @@ class CompraNuevo(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+<<<<<<< HEAD
         formset = self.get_CompraProdFormset(data=self.request.POST if self.request.method == 'POST' else None, instance=self.object)
         context['formset'] = formset
 
@@ -473,11 +543,18 @@ class CompraNuevo(CreateView):
             print("Formset no válido:", formset.errors)
             context['total'] = 0
 
+=======
+        if self.request.POST:
+            context['formset'] = CompraForm.CompraProdFormset(self.request.POST)
+        else:
+            context['formset'] = CompraForm.CompraProdFormset()
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+<<<<<<< HEAD
 
         if formset.is_valid() and form.is_valid():
             # Guardar el formulario principal
@@ -514,6 +591,16 @@ class CompraNuevo(CreateView):
         return inlineformset_factory(Compra, CompraProd, form=CompraProdForm, extra=5, can_delete=True, min_num=1)(data, instance=instance)
 
 
+=======
+        if formset.is_valid() and form.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 
 class CompraModif(UpdateView):
     model = Compra
@@ -521,6 +608,7 @@ class CompraModif(UpdateView):
     template_name = 'CompraProd.html'
     success_url = reverse_lazy('comprasLista')
 
+<<<<<<< HEAD
     def get_success_url(self) -> str:
         return self.request.path
 
@@ -537,11 +625,20 @@ class CompraModif(UpdateView):
             precio_compra = producto.PrecioCompra
             context['precio_compra'] = precio_compra
 
+=======
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['formset'] = CompraForm.CompraProdFormset(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = CompraForm.CompraProdFormset(instance=self.object)
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+<<<<<<< HEAD
 
         if formset.is_valid() and form.is_valid():
             # Guardar el formulario principal
@@ -594,6 +691,29 @@ def ventasPDF(request, ventas_pk):
     doc = SimpleDocTemplate(buf, pagesize=letter)
 
     venta_prods = VentaProd.objects.filter(Ventas__pk=ventas_pk)
+=======
+        if formset.is_valid() and form.is_valid():
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+
+def ventasPDF(request, venta_pk):
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+
+    venta_prods = VentaProd.objects.filter(Ventas__pk=venta_pk)
+
+    # Configura el buffer y el lienzo
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=letter)
+
+    textobj = c.beginText()
+    textobj.setTextOrigin(inch, inch)
+    textobj.setFont("Helvetica", 14)
+
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
     # Configura estilos
     styles = getSampleStyleSheet()
     title_style = styles['Title']
@@ -602,6 +722,7 @@ def ventasPDF(request, ventas_pk):
     # Contenido del PDF
     content = []
 
+<<<<<<< HEAD
     # Agrega título con el nombre de la tienda
     title_text = f"Stilo Tradi"
     title = Paragraph(title_text, title_style)
@@ -666,12 +787,29 @@ def ventasPDF(request, ventas_pk):
 
     # Aplica el estilo a la tabla
     table.setStyle(table_style)
+=======
+  
+    # Agrega título con la PK de la compra
+    title_text = f"Detalle de venta número: {venta_pk}"
+    title = Paragraph(title_text, title_style)
+    content.append(title)
+
+    for venta_prods in venta_prods:
+        # Detalles de Producto y Cantidad para cada compra
+
+        product_and_quantity_details = [
+            f'<b>Producto:</b> {venta_prods.Producto} <b>Cantidad:</b> {venta_prods.Cantidad}',
+                " ",  # Espacio entre cada instancia
+        ]
+        content.extend([Paragraph(detail, normal_style) for detail in product_and_quantity_details])
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 
     # Detalles únicos (Compra y Fecha)
     unique_details_added = False
     for venta_prod in venta_prods:
         if not unique_details_added:
             unique_details = [
+<<<<<<< HEAD
                 Paragraph(f'<b>Vendedor:</b> {venta_prod.Ventas.Vendedor}', normal_style),
                 Paragraph(f'<b>Cliente:</b> {venta_prod.Ventas.Cliente}', normal_style),
                 Paragraph(f'<b>TipoVenta:</b> {venta_prod.Ventas.TipoVenta}', normal_style),
@@ -695,6 +833,41 @@ def ventasPDF(request, ventas_pk):
     # Envía el PDF como respuesta
     buf.seek(0)
     response = FileResponse(buf, as_attachment=True, filename=f'venta_{ventas_pk}.pdf')
+=======
+                f'<b>Vendedor:</b> {venta_prods.Ventas.Vendedor}',
+                f'<b>Cliente:</b> {venta_prods.Ventas.Cliente}',
+                f'<b>TipoVenta:</b> {venta_prods.Ventas.TipoVenta}',
+                f'<b>TipoPago:</b> {venta_prods.Ventas.TipoPago}',
+                f'<b>Fecha:</b> {venta_prods.Ventas.Fecha}',
+                f'<b>Total:</b> {venta_prods.Total}',
+                    " ",  # Espacio entre cada instancia
+            ]
+             # Agrega detalles únicos al contenido
+            content.extend([Paragraph(detail, normal_style) for detail in unique_details])
+        unique_details_added = True
+
+    title_text = f"Gracias por su compra"
+    title = Paragraph(title_text, title_style)
+    content.append(title)
+
+    title_text = f"StiloTradi"
+    title = Paragraph(title_text, title_style)
+    content.append(title)
+
+    
+      # Construye el PDF
+    doc.build(content)
+
+    # Envia el PDF como respuesta
+    buf.seek(0)
+
+    c.drawText(textobj)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    response = FileResponse(buf, as_attachment=True, filename=f'venta_{venta_pk}.pdf')
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
     return response
 
 
@@ -705,10 +878,24 @@ def ventasPDF(request, ventas_pk):
 def comprasPDF(request, compra_pk):
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+<<<<<<< HEAD
     doc = SimpleDocTemplate(buf, pagesize=letter)
 
     compra_prods = CompraProd.objects.filter(Compra__pk=compra_pk)
 
+=======
+
+    compra_prods = CompraProd.objects.filter(Compra__pk=compra_pk)
+
+    # Configura el buffer y el lienzo
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=letter)
+
+    textobj = c.beginText()
+    textobj.setTextOrigin(inch, inch)
+    textobj.setFont("Helvetica", 14)
+
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
     # Configura estilos
     styles = getSampleStyleSheet()
     title_style = styles['Title']
@@ -717,6 +904,7 @@ def comprasPDF(request, compra_pk):
     # Contenido del PDF
     content = []
 
+<<<<<<< HEAD
     # Agrega título con el nombre de la tienda
     title_text = f"Stilo Tradi"
     title = Paragraph(title_text, title_style)
@@ -785,10 +973,44 @@ def comprasPDF(request, compra_pk):
     content.append(table)
     
     # Construye el PDF
+=======
+  
+    # Agrega título con la PK de la compra
+    title_text = f"Detalle de compra número: {compra_pk}"
+    title = Paragraph(title_text, title_style)
+    content.append(title)
+
+    for compra_prod in compra_prods:
+        # Detalles de Producto y Cantidad para cada compra
+
+        product_and_quantity_details = [
+            f'<b>Producto:</b> {compra_prod.Producto} <b>Cantidad:</b> {compra_prod.Cantidad}',
+                " ",  # Espacio entre cada instancia
+        ]
+        content.extend([Paragraph(detail, normal_style) for detail in product_and_quantity_details])
+
+    # Detalles únicos (Compra y Fecha)
+    unique_details_added = False
+    for compra_prod in compra_prods:
+        if not unique_details_added:
+            unique_details = [
+                f'<b>Proveedor:</b> {compra_prod.Compra.Proveedor}',
+                f'<b>Fecha:</b> {compra_prod.Compra.Fecha}',
+                f'<b>Total:</b> {compra_prod.Total}',
+                    " ",  # Espacio entre cada instancia
+            ]
+             # Agrega detalles únicos al contenido
+            content.extend([Paragraph(detail, normal_style) for detail in unique_details])
+        unique_details_added = True
+
+    
+      # Construye el PDF
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
     doc.build(content)
 
     # Envia el PDF como respuesta
     buf.seek(0)
+<<<<<<< HEAD
     response = FileResponse(buf, as_attachment=True, filename=f'compra_{compra_pk}.pdf')
     return response
 
@@ -822,3 +1044,16 @@ def login_view(request):
             return redirect('/login')
     else:
         return render(request, 'login.html')
+=======
+
+    c.drawText(textobj)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    response = FileResponse(buf, as_attachment=True, filename=f'compra_{compra_pk}.pdf')
+    return response
+
+def index(request):
+    return render(request, 'index.html')
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca

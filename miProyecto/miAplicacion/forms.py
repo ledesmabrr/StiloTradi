@@ -46,6 +46,7 @@ class ProductosForm(forms.ModelForm):
             'Marca': forms.TextInput(attrs={'class': 'form-control'}),
             'PrecioCompra': forms.NumberInput(attrs={'class': 'form-control', 'type': 'float'}),
             'PrecioVenta': forms.NumberInput(attrs={'class': 'form-control'}),
+<<<<<<< HEAD
             'Stock': forms.NumberInput(attrs={'class': 'form-control',  'min': '0'}),
         }
 
@@ -58,6 +59,20 @@ class ProductosForm(forms.ModelForm):
 #            'Producto': forms.Select(attrs={'class': 'form-select'}),  
 #            'Ventas': forms.Select(attrs={'class': 'form-select'}), 
 #        }
+=======
+            'Stock': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+class VentaProdForm(forms.ModelForm):
+    class Meta:
+        model = VentaProd
+        fields = '__all__'
+        widgets = {
+            'Producto': forms.Select(attrs={'class': 'form-select'}),  
+            'Ventas': forms.Select(attrs={'class': 'form-select'}), 
+        }
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 
 class VentasForm(forms.ModelForm):
     class Meta:
@@ -68,6 +83,7 @@ class VentasForm(forms.ModelForm):
             'Cliente': forms.Select(attrs={'class': 'form-select'}),
             'TipoVenta': forms.TextInput(attrs={'class': 'form-control'}),
             'TipoPago': forms.TextInput(attrs={'class': 'form-control'}),
+<<<<<<< HEAD
             'Fecha': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), 
             'Total': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
         }
@@ -134,6 +150,35 @@ VentaProdFormset = forms.inlineformset_factory(
     Ventas, VentaProd, form=VentaProdForm, formset=BaseVentaProdFormSet, extra=5, can_delete=True
 )
 
+=======
+            'Total': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Fecha': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+
+    VentaProdFormset = forms.inlineformset_factory(Ventas,VentaProd,  form=VentaProdForm, extra=5)
+
+    class TotalVenta(VentaProdFormset):
+        def clean(self):
+            super().clean()
+            for form in self.forms:
+                cantidad = form.cleaned_data.get("Cantidad")
+                if cantidad is not None:
+                    PrecioVenta = form.instance.TipoProducto.PrecioVenta
+                    total = cantidad * PrecioVenta
+                    form.instance.PrecioVenta = PrecioVenta
+                    form.instance.Total = total
+
+
+class CompraProdForm(forms.ModelForm):
+    class Meta:
+        model = CompraProd
+        fields = '__all__'
+        widgets = {
+            'Compra': forms.Select(attrs={'class': 'form-select'}),
+            'Producto': forms.Select(attrs={'class': 'form-select'}), 
+        }
+    
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
 
 class CompraForm(forms.ModelForm):
     class Meta:
@@ -142,6 +187,7 @@ class CompraForm(forms.ModelForm):
         widgets = {
             'Proveedor': forms.Select(attrs={'class': 'form-select'}),
             'Fecha': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+<<<<<<< HEAD
             'Total': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
             
         }
@@ -208,3 +254,9 @@ class BaseCompraProdFormset(forms.BaseInlineFormSet):
 CompraProdFormset = forms.inlineformset_factory(
     Compra, CompraProd, form=CompraProdForm, formset=BaseCompraProdFormset, extra=5, can_delete=True
 )
+=======
+            
+        }
+
+    CompraProdFormset = forms.inlineformset_factory(Compra,CompraProd, form= CompraProdForm, extra=5)
+>>>>>>> ef46de54e7253ec7cb346e267ecb0e25ae032dca
