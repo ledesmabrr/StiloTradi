@@ -7,12 +7,6 @@ urlpatterns = [
 
                path('', views.index, name='index'),
                path('', views.main, name='main'), 
-               path('login/', views.LoginView.as_view(template_name='login.html'), name='login'),
-               path('logout/', views.LogoutView.as_view, name='logout'),
-
-               path('base/', TemplateView.as_view(template_name='base.html'), name='base'),
-               path('index/', TemplateView.as_view(template_name='index.html'), name='index'),
-                path('cerrar/', TemplateView.as_view(template_name='cerrar.html'), name='cerrar'),
                
                path('producto/', views.tabla_producto, name='producto'),
                path('proveedor/', views.tabla_proveedor, name='proveedor'),
@@ -40,6 +34,10 @@ urlpatterns = [
                path('producto/ProductoNuevo/', views.ProductoNuevo.as_view(), name='productoNuevo'),
                path('producto/ProductoModif/<int:pk>/', views.ProductoModif.as_view(), name='ProductoModif'),
                path('producto/ProductoBorrar/<int:pk>/', views.ProductoBorrar.as_view(), name='productoBorrar'),
+
+               path('get-product-price/<int:producto_id>/', views.get_precio_producto, name='get_product_price'),
+               path('get-product-price-compra/<int:producto_id>/', views.get_precio_compra_producto, name='get_product_price-compra'),
+               path('get-product-stock/<int:product_id>/', views.get_product_stock, name='get_product_stock'),
 
                path('ventas/VentasLista/', views.VentasLista.as_view(), name='ventasLista'), 
                path('ventas/VentasNuevo/', views.VentasNuevo.as_view(), name='ventasNuevo'),

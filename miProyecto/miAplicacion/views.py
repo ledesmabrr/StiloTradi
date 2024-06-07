@@ -1,12 +1,19 @@
+from ast import Yield
+from calendar import c
+from cgitb import text
+import colorsys
 from msilib import Table
-from django.shortcuts import render, reverse
+from pyexpat.errors import messages
+from urllib import request
+import xdrlib
+from django.shortcuts import redirect, render, reverse
 from django.urls import reverse_lazy
-from django.forms import formset_factory
+from django.forms import formset_factory, inlineformset_factory
 from django.views import View
 from django.views.generic import CreateView, UpdateView, DeleteView, ListView
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect, JsonResponse
 from .models import Cliente,Compra,Producto,Proveedor,Vendedores,Ventas, CompraProd, VentaProd
-from .forms import VendedoresForm, ClientesForm, ProductosForm, ProveedorForm,VentasForm,CompraForm,VentaProdForm 
+from .forms import CompraProdForm, VendedoresForm, ClientesForm, ProductosForm, ProveedorForm,VentasForm,CompraForm,VentaProdForm 
 from django.http import FileResponse
 import io
 from reportlab.pdfgen import canvas
@@ -17,8 +24,12 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph,Table, TableStyle
+from reportlab.platypus import Paragraph
 from django.contrib.auth.views import LoginView, LogoutView 
 from django.db.models import Sum
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
 # Create your views here.
 def main(request):
@@ -209,7 +220,29 @@ class ProductoLista(ListView):
             productos = Producto.objects.filter(TipoProducto__icontains = query)
         return productos
        
-  
+
+
+
+def get_precio_producto(request, producto_id):
+    try:
+        producto = Producto.objects.get(pk=producto_id)
+        precio = producto.PrecioVenta  # Ajusta esto según el nombre del campo en tu modelo Producto
+        return JsonResponse({'precio': precio})
+    except Producto.DoesNotExist:
+        return JsonResponse({'error': 'El producto no existe'}, status=404)
+
+
+def get_precio_compra_producto(request, producto_id):
+    try:
+        producto = Producto.objects.get(pk=producto_id)
+        precioCompra = producto.PrecioCompra  # Ajusta esto según el nombre del campo en tu modelo Producto
+        return JsonResponse({'precioCompra': precioCompra})
+    except Producto.DoesNotExist:
+        return JsonResponse({'error': 'El producto no existe'}, status=404)
+
+
+
+
 class VentasNuevo(CreateView):
     model = Ventas
     form_class = VentasForm   
@@ -218,24 +251,73 @@ class VentasNuevo(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        formset = self.get_VentaProdFormset(data=self.request.POST if self.request.method == 'POST' else None, instance=self.object)
+        context['formset'] = formset
 
-        if self.request.POST:
-            context['formset'] = VentasForm.VentaProdFormset(self.request.POST)
+        # Obtener el precio de venta del producto seleccionado y pasarlo al formulario VentaProdForm
+        producto_id = self.request.POST.get('Producto', None)
+        if producto_id:
+            producto = Producto.objects.get(pk=producto_id)
+            precio_venta = producto.PrecioVenta
+            context['precio_venta'] = precio_venta
+
+        # Calcular el total solo si el formset es válido
+        if formset.is_valid():
+            total = sum(float(form.cleaned_data.get('SubTotal', 0)) for form in formset.forms if form.is_valid())
+            context['total'] = total
         else:
-            context['formset'] = VentasForm.VentaProdFormset()
+            print("Formset no válido:", formset.errors)
+            context['total'] = 0
+
         return context
-    
+
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+
         if formset.is_valid() and form.is_valid():
+            # Guardar el formulario principal
             self.object = form.save()
-            formset.instance = self.object
-            formset.save()
+
+            # Guardar los objetos VentaProd asociados
+            for venta_prod_form in formset:
+                if venta_prod_form.cleaned_data:
+                    venta_prod_form.instance.Ventas = self.object
+                    venta_prod_form.save()
+
+                    # Descontar el stock de cada producto vendido
+                    producto = venta_prod_form.cleaned_data['Producto']
+                    cantidad_vendida = venta_prod_form.cleaned_data['Cantidad']
+                    producto.Stock -= cantidad_vendida
+                    producto.save()
+
+            # Calcular y guardar el total en el formulario Ventas
+            total = sum(float(form.cleaned_data.get('SubTotal', 0)) for form in formset.forms if form.is_valid() and form.cleaned_data.get('SubTotal') is not None)
+            self.object.Total = total
+            self.object.save()
+
+            print("Total de la venta:", total)
+
+            # Realiza la acción necesaria después de que el formulario es válido
+            print("Venta guardada correctamente:", self.object)
             return super().form_valid(form)
         else:
+            print("Formulario principal inválido: ", form.errors)
+            print("Formset inválido: ", formset.errors)
             return self.render_to_response(self.get_context_data(form=form))
-        
+
+    def get_VentaProdFormset(self, data=None, instance=None):
+        return inlineformset_factory(Ventas, VentaProd, form=VentaProdForm, extra=5, can_delete=True, min_num=1)(data, instance=instance)
+
+
+
+
+
+
+
+
+
+
 
 class VentasModif(UpdateView):
     model = Ventas
@@ -248,29 +330,77 @@ class VentasModif(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        formset = self.get_VentaProdFormset(data=self.request.POST if self.request.method == 'POST' else None, instance=self.object)
+        context['formset'] = formset
+        context['form'] = self.get_form()
 
-        Ventas = self.object
-        total = Ventas.VentaProd_set.aggregate(total_sum= Sum("Total"))["total_sum"] or 0
-        #TotalGeneral = Ventas.ventaprod_set.aggregate(sum("total"))["total__sum"] or 0
-        context["TotalGeneral"] = total
+        # Obtener el precio de venta del producto seleccionado y pasarlo al formulario VentaProdForm
+        producto_id = self.request.POST.get('Producto', None)
+        if producto_id:
+            producto = Producto.objects.get(pk=producto_id)
+            precio_venta = producto.PrecioVenta
+            context['precio_venta'] = precio_venta
 
-        if self.request.POST:
-            context['formset'] = VentasForm.VentaProdFormset(self.request.POST, instance=self.object)
-        else:
-            context['formset'] = VentasForm.VentaProdFormset(instance=self.object)
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+
         if formset.is_valid() and form.is_valid():
-            formset.save()
+            # Guardar el formulario principal
+            self.object = form.save()
+            subtotals = []
+            # Guardar los objetos VentaProd asociados
+            for venta_prod_form in formset:
+                if venta_prod_form.cleaned_data:
+                    venta_prod_form.instance.Ventas = self.object
+                    venta_prod_form.save()
+
+                    # Descontar el stock de cada producto vendido
+                    producto = venta_prod_form.cleaned_data['Producto']
+                    cantidad_vendida = venta_prod_form.cleaned_data['Cantidad']
+                    producto.Stock -= cantidad_vendida
+                    producto.save()
+
+             # Recalcular y guardar el total en el formulario Ventas
+            total_anterior = float(self.object.Total)
+            total_nuevo = sum(float(form.cleaned_data['SubTotal']) for form in formset.forms if form.is_valid() and form.cleaned_data.get('SubTotal') is not None)
+            total = total_anterior + total_nuevo
+            self.object.Total = total
+            self.object.save()
+
+            # Realiza la acción necesaria después de que el formulario es válido
+            print("Venta guardada correctamente:", self.object)
             return super().form_valid(form)
         else:
+            print("Formulario principal inválido: ", form.errors)
+            print("Formset inválido: ", formset.errors)
             return self.render_to_response(self.get_context_data(form=form))
+        
+    def get_VentaProdFormset(self, data=None, instance=None):
+        formset = inlineformset_factory(Ventas, VentaProd, form=VentaProdForm, extra=5, can_delete=True, min_num=1, fields=('Ventas','Producto', 'Cantidad', 'PrecioVenta', 'SubTotal'))(data, instance=instance)
+
+        # Obtener el precio de venta del producto seleccionado y pasarlo al formulario VentaProdForm
+        if instance and instance.pk:
+            for form in formset.forms:
+                if form.instance.pk:
+                    producto_id = form.instance.Producto.pk
+                    producto = Producto.objects.get(pk=producto_id)
+                    form.initial['PrecioVenta'] = producto.PrecioVenta
+        
+        return formset
+
+
+
+
+
+
+
 
 class VentasLista(ListView):
     model = Ventas
+    ordering = ['-id']  # Ordena por id de manera descendente
     template_name = 'ventas.html'
     context_object_name = 'ventas'
     paginate_by = 3
@@ -294,6 +424,7 @@ class VentasLista(ListView):
     
 class ComprasLista(ListView):
     model = Compra
+    ordering = ['-id']  # Ordena por id de manera descendente
     template_name = 'compra.html'
     context_object_name = 'compra'
     paginate_by = 3
@@ -324,22 +455,64 @@ class CompraNuevo(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['formset'] = CompraForm.CompraProdFormset(self.request.POST)
+        formset = self.get_CompraProdFormset(data=self.request.POST if self.request.method == 'POST' else None, instance=self.object)
+        context['formset'] = formset
+
+        # Obtener el precio de venta del producto seleccionado y pasarlo al formulario VentaProdForm
+        producto_id = self.request.POST.get('Producto', None)
+        if producto_id:
+            producto = Producto.objects.get(pk=producto_id)
+            precio_compra = producto.PrecioCompra
+            context['precio_compra'] = precio_compra
+
+        # Calcular el total solo si el formset es válido
+        if formset.is_valid():
+            total = sum(float(form.cleaned_data.get('SubTotal', 0)) for form in formset.forms if form.is_valid())
+            context['total'] = total
         else:
-            context['formset'] = CompraForm.CompraProdFormset()
+            print("Formset no válido:", formset.errors)
+            context['total'] = 0
+
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+
         if formset.is_valid() and form.is_valid():
+            # Guardar el formulario principal
             self.object = form.save()
-            formset.instance = self.object
-            formset.save()
+
+            # Guardar los objetos VentaProd asociados
+            for compra_prod_form in formset:
+                if compra_prod_form.cleaned_data:
+                    compra_prod_form.instance.Compra = self.object
+                    compra_prod_form.save()
+
+                    # # Descontar el stock de cada producto vendido
+                    # producto = compra_prod_form.cleaned_data['Producto']
+                    # cantidad_vendida = compra_prod_form.cleaned_data['Cantidad']
+                    # producto.Stock -= cantidad_vendida
+                    # producto.save()
+
+            # Calcular y guardar el total en el formulario Ventas
+            total = sum(float(form.cleaned_data.get('SubTotal', 0)) for form in formset.forms if form.is_valid() and form.cleaned_data.get('SubTotal') is not None)
+            self.object.Total = total
+            self.object.save()
+
+            print("Total de la compra:", total)
+
+            # Realiza la acción necesaria después de que el formulario es válido
+            print("Compra guardada correctamente:", self.object)
             return super().form_valid(form)
         else:
+            print("Formulario principal inválido: ", form.errors)
+            print("Formset inválido: ", formset.errors)
             return self.render_to_response(self.get_context_data(form=form))
+
+    def get_CompraProdFormset(self, data=None, instance=None):
+        return inlineformset_factory(Compra, CompraProd, form=CompraProdForm, extra=5, can_delete=True, min_num=1)(data, instance=instance)
+
 
 
 class CompraModif(UpdateView):
@@ -348,38 +521,79 @@ class CompraModif(UpdateView):
     template_name = 'CompraProd.html'
     success_url = reverse_lazy('comprasLista')
 
+    def get_success_url(self) -> str:
+        return self.request.path
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['formset'] = CompraForm.CompraProdFormset(self.request.POST, instance=self.object)
-        else:
-            context['formset'] = CompraForm.CompraProdFormset(instance=self.object)
+        formset = self.get_CompraProdFormset(data=self.request.POST if self.request.method == 'POST' else None, instance=self.object)
+        context['formset'] = formset
+        context['form'] = self.get_form()
+
+        # Obtener el precio de venta del producto seleccionado y pasarlo al formulario VentaProdForm
+        producto_id = self.request.POST.get('Producto', None)
+        if producto_id:
+            producto = Producto.objects.get(pk=producto_id)
+            precio_compra = producto.PrecioCompra
+            context['precio_compra'] = precio_compra
+
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+
         if formset.is_valid() and form.is_valid():
-            formset.save()
+            # Guardar el formulario principal
+            self.object = form.save()
+
+            # Guardar los objetos VentaProd asociados
+            for compra_prod_form in formset:
+                if compra_prod_form.cleaned_data:
+                    compra_prod_form.instance.Compra = self.object
+                    compra_prod_form.save()
+
+                    # # Descontar el stock de cada producto vendido
+                    # producto = compra_prod_form.cleaned_data['Producto']
+                    # cantidad_vendida = compra_prod_form.cleaned_data['Cantidad']
+                    # producto.Stock -= cantidad_vendida
+                    # producto.save()
+
+             # Recalcular y guardar el total en el formulario Ventas
+            total_anterior = float(self.object.Total)
+            total_nuevo = sum(float(form.cleaned_data['SubTotal']) for form in formset.forms if form.is_valid() and form.cleaned_data.get('SubTotal') is not None)
+            total = total_anterior + total_nuevo
+            self.object.Total = total
+            self.object.save()
+
+            # Realiza la acción necesaria después de que el formulario es válido
+            print("Compra guardada correctamente:", self.object)
             return super().form_valid(form)
         else:
+            print("Formulario principal inválido: ", form.errors)
+            print("Formset inválido: ", formset.errors)
             return self.render_to_response(self.get_context_data(form=form))
+        
+    def get_CompraProdFormset(self, data=None, instance=None):
+        formset = inlineformset_factory(Compra, CompraProd, form=CompraProdForm, extra=5, can_delete=True, min_num=1, fields=('Compra','Producto', 'Cantidad', 'PrecioCompra', 'SubTotal'))(data, instance=instance)
 
+        # Obtener el precio de venta del producto seleccionado y pasarlo al formulario VentaProdForm
+        if instance and instance.pk:
+            for form in formset.forms:
+                if form.instance.pk:
+                    producto_id = form.instance.Producto.pk
+                    producto = Producto.objects.get(pk=producto_id)
+                    form.initial['PrecioCompra'] = producto.PrecioCompra
+        
+        return formset
 
-def ventasPDF(request, venta_pk):
-    buf = io.BytesIO()
-    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
-
-    venta_prods = VentaProd.objects.filter(Ventas__pk=venta_pk)
-
+def ventasPDF(request, ventas_pk):
     # Configura el buffer y el lienzo
     buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter)
     doc = SimpleDocTemplate(buf, pagesize=letter)
 
-    textobj = c.beginText()
-    textobj.setTextOrigin(inch, inch)
-    textobj.setFont("Helvetica", 14)
-
+    venta_prods = VentaProd.objects.filter(Ventas__pk=ventas_pk)
     # Configura estilos
     styles = getSampleStyleSheet()
     title_style = styles['Title']
@@ -388,59 +602,99 @@ def ventasPDF(request, venta_pk):
     # Contenido del PDF
     content = []
 
-  
-    # Agrega título con la PK de la compra
-    title_text = f"Detalle de venta número: {venta_pk}"
+    # Agrega título con el nombre de la tienda
+    title_text = f"Stilo Tradi"
     title = Paragraph(title_text, title_style)
     content.append(title)
 
-    for venta_prods in venta_prods:
-        # Detalles de Producto y Cantidad para cada compra
+    # Detalles de la venta
+    text_lines = [
+        "Libertad 275 San Pedro (5870), Cordoba",
+        "",
+        "Factura simplificada",
+        f"Fecha: {venta_prods.first().Ventas.Fecha if venta_prods.exists() else 'Fecha no disponible'}",  # Obtener la fecha de la primera venta si existe
+        f"Detalle de venta número: {ventas_pk}",
+        "-----------------------------------------------------------------"
 
-        product_and_quantity_details = [
-            f'<b>Producto:</b> {venta_prods.Producto} <b>Cantidad:</b> {venta_prods.Cantidad}',
-                " ",  # Espacio entre cada instancia
-        ]
-        content.extend([Paragraph(detail, normal_style) for detail in product_and_quantity_details])
+    ]
+
+    for line in text_lines:
+        paragraph = Paragraph(line, normal_style)
+        content.append(paragraph)
+
+
+    # Encabezado de la tabla
+    header = [
+        Paragraph("<b>Producto</b>", normal_style),
+        Paragraph("<b>Cantidad</b>", normal_style),
+        Paragraph("<b>Precio</b>", normal_style),
+        Paragraph("<b>Subtotal</b>", normal_style)
+    ]   
+
+    # Detalles de Producto, Cantidad y precio para cada compra
+    product_and_quantity_details = []
+    total_venta = 0  # Inicializa el total de la venta
+    for venta_prod in venta_prods:
+        product_and_quantity_details.append([
+            venta_prod.Producto,
+            venta_prod.Cantidad,
+            venta_prod.Producto.PrecioVenta,
+            venta_prod.SubTotal
+            #agregar el precio
+        ])
+        total_venta += venta_prod.SubTotal
+        # total_venta = venta_prod.Ventas.Total
+
+    # Agrega el encabezado a la lista de detalles
+    product_and_quantity_details.insert(0, header)
+
+   # Agrega el total al final de los detalles
+    total_paragraph = Paragraph(f"<b>Total: {venta_prod.Ventas.Total}</b>", normal_style)
+    product_and_quantity_details.append(["", "", "", total_paragraph])
+
+     # Configura el estilo de la tabla
+    table_style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),  # Fondo gris para el encabezado
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),  # Texto blanco para el encabezado
+        ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),  # Tipo de fuente
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),  # Alineación izquierda 
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),  # Alineación vertical superior
+    ])
+
+    # Crea la tabla con los detalles de producto y cantidad
+    table = Table(product_and_quantity_details)
+
+    # Aplica el estilo a la tabla
+    table.setStyle(table_style)
 
     # Detalles únicos (Compra y Fecha)
     unique_details_added = False
     for venta_prod in venta_prods:
         if not unique_details_added:
             unique_details = [
-                f'<b>Vendedor:</b> {venta_prods.Ventas.Vendedor}',
-                f'<b>Cliente:</b> {venta_prods.Ventas.Cliente}',
-                f'<b>TipoVenta:</b> {venta_prods.Ventas.TipoVenta}',
-                f'<b>TipoPago:</b> {venta_prods.Ventas.TipoPago}',
-                f'<b>Fecha:</b> {venta_prods.Ventas.Fecha}',
-                f'<b>Total:</b> {venta_prods.Total}',
-                    " ",  # Espacio entre cada instancia
+                Paragraph(f'<b>Vendedor:</b> {venta_prod.Ventas.Vendedor}', normal_style),
+                Paragraph(f'<b>Cliente:</b> {venta_prod.Ventas.Cliente}', normal_style),
+                Paragraph(f'<b>TipoVenta:</b> {venta_prod.Ventas.TipoVenta}', normal_style),
+                Paragraph(f'<b>TipoPago:</b> {venta_prod.Ventas.TipoPago}', normal_style),
             ]
-             # Agrega detalles únicos al contenido
-            content.extend([Paragraph(detail, normal_style) for detail in unique_details])
-        unique_details_added = True
-
-    title_text = f"Gracias por su compra"
-    title = Paragraph(title_text, title_style)
-    content.append(title)
-
-    title_text = f"StiloTradi"
-    title = Paragraph(title_text, title_style)
-    content.append(title)
-
+            # Agrega detalles únicos al contenido
+            content.extend(unique_details)
+            content.append(Paragraph("-----------------------------------------------------------------", normal_style))  # Agregar separador de línea
+            unique_details_added = True
     
-      # Construye el PDF
+    # Agrega la tabla al contenido del PDF
+    content.append(table)
+   # Mensaje de agradecimiento
+    thank_you_text = f"Gracias por su compra"
+    thank_you = Paragraph(thank_you_text, title_style)
+    content.append(thank_you)
+
+    # Construye el PDF
     doc.build(content)
 
-    # Envia el PDF como respuesta
+    # Envía el PDF como respuesta
     buf.seek(0)
-
-    c.drawText(textobj)
-    c.showPage()
-    c.save()
-    buf.seek(0)
-
-    response = FileResponse(buf, as_attachment=True, filename=f'venta_{venta_pk}.pdf')
+    response = FileResponse(buf, as_attachment=True, filename=f'venta_{ventas_pk}.pdf')
     return response
 
 
@@ -451,16 +705,9 @@ def ventasPDF(request, venta_pk):
 def comprasPDF(request, compra_pk):
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
-
-    compra_prods = CompraProd.objects.filter(Compra__pk=compra_pk)
-
-    # Configura el buffer y el lienzo
-    buf = io.BytesIO()
     doc = SimpleDocTemplate(buf, pagesize=letter)
 
-    textobj = c.beginText()
-    textobj.setTextOrigin(inch, inch)
-    textobj.setFont("Helvetica", 14)
+    compra_prods = CompraProd.objects.filter(Compra__pk=compra_pk)
 
     # Configura estilos
     styles = getSampleStyleSheet()
@@ -470,41 +717,113 @@ def comprasPDF(request, compra_pk):
     # Contenido del PDF
     content = []
 
-  
-    # Agrega título con la PK de la compra
-    title_text = f"Detalle de compra número: {compra_pk}"
+    # Agrega título con el nombre de la tienda
+    title_text = f"Stilo Tradi"
     title = Paragraph(title_text, title_style)
     content.append(title)
 
+    # Detalles de la compra
+    text_lines = [
+        "Factura simplificada",
+        f"Fecha: {compra_prods.first().Compra.Fecha if compra_prods.exists() else 'Fecha no disponible'}", 
+        f"Proveedor: {compra_prods.first().Compra.Proveedor }",
+        f"Detalle de compra número: {compra_pk}",
+        "-------------------------------------------"
+    ]
+
+    for line in text_lines:
+        paragraph = Paragraph(line, normal_style)
+        content.append(paragraph)
+
+    # Agrega la tabla al contenido del PDF
+    content.append(Paragraph(" ", normal_style))  # Salto de línea antes de la tabla
+
+    # Encabezado de la tabla
+    header = [
+        Paragraph("<b>Producto</b>", normal_style),
+        Paragraph("<b>Cantidad</b>", normal_style),
+        Paragraph("<b>Precio de Compra</b>", normal_style),
+        Paragraph("<b>Subtotal</b>", normal_style)
+    ]   
+
+    # Detalles de Producto, Cantidad y precio para cada compra
+    product_and_quantity_details = []
+    total_compra = 0  # Inicializa el total de la venta
     for compra_prod in compra_prods:
-        # Detalles de Producto y Cantidad para cada compra
+        product_and_quantity_details.append([
+            compra_prod.Producto,
+            compra_prod.Cantidad,
+            compra_prod.Producto.PrecioCompra,
+            compra_prod.SubTotal
+        ])
+        total_compra += compra_prod.SubTotal
 
-        product_and_quantity_details = [
-            f'<b>Producto:</b> {compra_prod.Producto} <b>Cantidad:</b> {compra_prod.Cantidad}',
-                " ",  # Espacio entre cada instancia
-        ]
-        content.extend([Paragraph(detail, normal_style) for detail in product_and_quantity_details])
+    # Agrega el encabezado a la lista de detalles
+    product_and_quantity_details.insert(0, header)
 
-    # Detalles únicos (Compra y Fecha)
-    unique_details_added = False
-    for compra_prod in compra_prods:
-        if not unique_details_added:
-            unique_details = [
-                f'<b>Proveedor:</b> {compra_prod.Compra.Proveedor}',
-                f'<b>Fecha:</b> {compra_prod.Compra.Fecha}',
-                f'<b>Total:</b> {compra_prod.Total}',
-                    " ",  # Espacio entre cada instancia
-            ]
-             # Agrega detalles únicos al contenido
-            content.extend([Paragraph(detail, normal_style) for detail in unique_details])
-        unique_details_added = True
+    # Agrega el total al final de los detalles
+    total_paragraph = Paragraph(f"<b>Total: {compra_prod.Compra.Total}</b>", normal_style)
+    product_and_quantity_details.append(["", "", "", total_paragraph])
 
+    # Configura el estilo de la tabla
+    table_style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),  # Fondo gris para el encabezado
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),  # Texto blanco para el encabezado
+        ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),  # Tipo de fuente
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),  # Alineación izquierda 
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),  # Alineación vertical superior
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Borde para todas las celdas
+    ])
+
+    # Crea la tabla con los detalles de producto y cantidad
+    table = Table(product_and_quantity_details)
+
+    # Aplica el estilo a la tabla
+    table.setStyle(table_style)
+
+    # Agrega la tabla al contenido del PDF
+    content.append(table)
     
-      # Construye el PDF
+    # Construye el PDF
     doc.build(content)
 
     # Envia el PDF como respuesta
     buf.seek(0)
+
+    response = FileResponse(buf, as_attachment=True, filename=f'compra_{compra_pk}.pdf')
+    return response
+
+
+def index(request):
+    return render(request, 'index.html')
+
+def get_product_stock(request, product_id):
+    try:
+        product = Producto.objects.get(pk=product_id)
+        stock = product.Stock
+        return JsonResponse({'stock': stock})
+    except Producto.DoesNotExist:
+        return JsonResponse({'error': 'Producto no encontrado'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirige al usuario a la página que quieras
+            return redirect('/base')
+        else:
+            # Muestra un mensaje de error si las credenciales son incorrectas
+            messages.error(request, 'Usuario o contraseña incorrectos')
+            return redirect('/login')
+    else:
+        return render(request, 'login.html')
+
 
     c.drawText(textobj)
     c.showPage()

@@ -30,6 +30,7 @@ class Proveedor(models.Model):
 class Compra(models.Model):
     Proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     Fecha = models.DateField ()
+    Total = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)
 
 
 class Vendedores(models.Model):
@@ -56,14 +57,14 @@ class Ventas(models.Model):
     TipoPago = models.CharField (max_length=50)
     Fecha = models.DateField ()
 
-class VentaProd(models.Model): 
-    Producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    Total = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)
+
     Ventas = models.ForeignKey (Ventas, on_delete=models.CASCADE, related_name='VentaProd_set')  
     Cantidad = models.IntegerField (default=0)
-    Total = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)
+    SubTotal = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)
 
 class CompraProd(models.Model): 
     Compra=  models.ForeignKey(Compra, on_delete=models.CASCADE)
     Producto=  models.ForeignKey(Producto, on_delete=models.CASCADE)
     Cantidad = models.IntegerField (default=0)
-    Total = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)
+    SubTotal = models.DecimalField (max_digits=10, decimal_places=2, default=0.00)
